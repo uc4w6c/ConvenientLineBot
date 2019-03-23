@@ -87,13 +87,13 @@ public class LineBotService {
 		return message;
 	}
 
-	private String stateStatusChang(State state) {
+	private String stateStatusChange(State state) {
 		Root<State> root;
 		CriteriaQuery<?> criteriaQuery;
 		CriteriaBuilder criteriaBuilder;
 		
 		List<State> companies = this.stateRepository.findAll(Specifications
-				.where(Specification<State>criteriaBuilder.equal(root.get("sourceType"), state.getSourceType()) ));
+				.where(Predicate(criteriaBuilder.equal(root.get("sourceType"), state.getSourceType()) )));
 		
 		source_type	user_id	group_id	room_id
 		
