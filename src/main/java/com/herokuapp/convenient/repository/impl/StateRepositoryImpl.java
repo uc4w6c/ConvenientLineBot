@@ -13,6 +13,7 @@ import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.StateRepositoryCustom;
 import com.herokuapp.convenient.service.consts.CodeEnum;
 import com.herokuapp.convenient.service.consts.SourceType;
+import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
 
 public class StateRepositoryImpl implements StateRepositoryCustom {
@@ -25,6 +26,10 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	private final String SELECT_STATE = "SELECT * FROM states "
 								+ "WHERE source_type = {TYPE} and "
 								+ "user_id = '{USERID}' ";
+
+	private final String INSERT_STATE = "INSERT INTO states "
+								+ "(source_type, {KEY}, state_kind, status) "
+								+ "values ({VALUE})";
 
 	private final String UPDATE_STATE = "UPDATE states "
 								+ "SET status = {STATUS} "
@@ -66,6 +71,48 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		Query query = manager.createQuery(sql.toString());
 		List<State> states = query.getResultList();
 		return states.get(0);
+	}
+
+	public int insertStatus(State state) {
+		
+		String key = null;
+		String value = null;
+		switch (CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName()) {
+		case "USER" : {
+			key = "user_id";
+			value = state.getSourceType() + ", " 
+					+ "'" + state.getUserId() + "', "
+					+ "'" + StateKind.TASK.value() + "', "
+					+ StatusKind.ACCEPTING.value();
+		}
+		case "GROUP" : {
+			key = "user_id, group_id";
+			value = state.getSourceType() + ", " 
+					+ "'" + state.getUserId() + "', "
+					+ "'" + state.getGroupId() + "', "
+					+ "'" + StateKind.TASK.value() + "', "
+					+ StatusKind.ACCEPTING.value();
+			break;
+		}
+		case "ROOM": {
+			key = "user_id, room_id";
+			value = state.getSourceType() + ", " 
+					+ "'" + state.getUserId() + "', "
+					+ "'" + state.getRoomId() + "', "
+					+ "'" + StateKind.TASK.value() + "', "
+					+ StatusKind.ACCEPTING.value();
+			break;
+		}
+		default: {
+			throw new IllegalArgumentException("typeに設定の値が想定外の値です。");
+		}
+		}
+
+		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
+
+		Query query = manager.createQuery(sql.toString());
+		int result = query.executeUpdate();
+		return result;
 	}
 
 	public int changeStatus(State state) {

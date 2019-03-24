@@ -1,13 +1,6 @@
 package com.herokuapp.convenient.service;
 
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 
 import com.herokuapp.convenient.domain.State;
@@ -44,7 +37,7 @@ public class LineBotService {
 	 */
 	public String makeReply(MessageEvent<TextMessageContent> event) {
 		String receivedMessage = event.getMessage().getText(); 
-		String replyMessage;
+		String replyMessage = null;
 		Source source = event.getSource();
 
 		switch (receivedMessage) {
@@ -80,6 +73,7 @@ public class LineBotService {
 
 			}
 			replyMessage = stateStatusChange(state);
+			break;
 		}
 		case END_REQUEST: {
 			
@@ -89,8 +83,7 @@ public class LineBotService {
 			break;
 		}
 
-		String message = null;
-		return message;
+		return replyMessage;
 	}
 
 	private String stateStatusChange(State state) {
@@ -114,14 +107,19 @@ public class LineBotService {
 		}
 		}
 
-		State newState;
+		int result = 0;
 		if (nowState == null) {
-			newState = state;
+			result = this.stateRepositoryImpl.insertStatus(state);
 		} else {
-			newState = nowState;
+			result = this.stateRepositoryImpl.changeStatus(nowState);
 		}
-		int result = this.stateRepositoryImpl.changeStatus(state);
 
-		return "";
+		if (result == 0) {
+			return "ごめんにゃー。\\r\\n"
+					+ "エラーが発生したから再度試してみてにゃー";
+		}
+
+		return "こんにちはにゃー\\\\r\\\\n"
+				+ "今からメモるにゃー";
 	}
 }
