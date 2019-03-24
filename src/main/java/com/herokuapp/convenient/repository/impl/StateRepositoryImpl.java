@@ -111,7 +111,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
 
-		Query query = manager.createQuery(sql.toString());
+		Query query = manager.createNativeQuery(sql.toString());
 		int result = query.executeUpdate();
 		return result;
 	}
@@ -140,7 +140,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			sql.append("and room_id = '" + state.getRoomId() + "'");
 		}
 
-		Query query = manager.createQuery(sql.toString());
+		Query query = manager.createNamedQuery(sql.toString());
 		int result = query.executeUpdate();
 		return result;
 	}
