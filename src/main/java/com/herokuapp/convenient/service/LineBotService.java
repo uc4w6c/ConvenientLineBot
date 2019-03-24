@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.herokuapp.convenient.domain.State;
 import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.TaskRepository;
+import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
+import com.herokuapp.convenient.service.consts.CodeEnum;
 import com.herokuapp.convenient.service.consts.SourceType;
 import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
@@ -26,6 +28,10 @@ import com.linecorp.bot.model.event.source.Source;
 public class LineBotService {
 	@Autowired
 	StateRepository stateRepository;
+
+	@Autowired
+	StateRepositoryImpl stateRepositoryImpl;
+
 	@Autowired
 	TaskRepository taskRepository;
 	
@@ -88,13 +94,34 @@ public class LineBotService {
 	}
 
 	private String stateStatusChange(State state) {
-		
-		List<State> companies = this.stateRepository.findAll(Specifications
-				.where(Predicate(criteriaBuilder.equal(root.get("sourceType"), state.getSourceType()) )));
-		
-		source_type	user_id	group_id	room_id
-		
-		stateRepository.save(state);
+		// TODO:全体的にリファクタリングしたい
+
+		State nowState = null;
+		switch (CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName()) {
+		case "USER": {
+			nowState = this.stateRepositoryImpl.fetchState(state.getUserId());
+			break;
+		}
+		case "GROUP": {
+			nowState = this.stateRepositoryImpl.fetchState(state.getUserId(),
+					CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName(),
+					state.getGroupId());
+		}
+		case "ROOM": {
+			nowState = this.stateRepositoryImpl.fetchState(state.getUserId(),
+					CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName(),
+					state.getRoomId());
+		}
+		}
+
+		State newState;
+		if (nowState == null) {
+			newState = state;
+		} else {
+			newState = nowState;
+		}
+		int result = this.stateRepositoryImpl.changeStatus(state);
+
 		return "";
 	}
 }

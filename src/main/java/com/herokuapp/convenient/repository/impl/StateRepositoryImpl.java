@@ -11,6 +11,9 @@ import org.springframework.data.jpa.repository.JpaContext;
 import com.herokuapp.convenient.domain.State;
 import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.StateRepositoryCustom;
+import com.herokuapp.convenient.service.consts.CodeEnum;
+import com.herokuapp.convenient.service.consts.SourceType;
+import com.herokuapp.convenient.service.consts.StatusKind;
 
 public class StateRepositoryImpl implements StateRepositoryCustom {
 	@Autowired
@@ -19,21 +22,21 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	@Autowired
 	private EntityManager manager;
 	
-	public int findBySpec(String prop) {
-		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
+	private final String SELECT_STATE = "SELECT * FROM states "
+								+ "WHERE source_type = {TYPE} and "
+								+ "user_id = '{USERID}' ";
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT g From Goods g WHERE ");
-		Query query = manager.createQuery(sql.toString());
-		List<State> states = query.getResultList();
-		return states.size();
-	}
+	private final String UPDATE_STATE = "UPDATE states "
+								+ "SET status = {STATUS} "
+								+ "WHERE source_type = {TYPE} and "
+								+ "user_id = '{USERID}' ";
 
 	public State fetchState(String userId) {
 		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
+		StringBuilder sql = new StringBuilder(
+				SELECT_STATE.replace("{TYPE}", SourceType.USER.getName()).
+							 replace("{USERID}", userId));
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT g From Goods g WHERE ");
 		Query query = manager.createQuery(sql.toString());
 		List<State> states = query.getResultList();
 		return states.get(0);
@@ -42,10 +45,55 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	public State fetchState(String userId, String type, String keyId) {
 		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT g From Goods g WHERE ");
+		StringBuilder sql = new StringBuilder(
+				SELECT_STATE.replace("{TYPE}", type).
+							 replace("{USERID}", userId) + " and ");
+
+		switch (type) {
+		case "GROUP" : {
+			sql.append("group_id = '" + keyId + "'");
+			break;
+		}
+		case "ROOM": {
+			sql.append("room_id = '" + keyId + "'");
+			break;
+		}
+		default: {
+			throw new IllegalArgumentException("typeに設定の値が想定外の値です。");
+		}
+		}
+
 		Query query = manager.createQuery(sql.toString());
 		List<State> states = query.getResultList();
 		return states.get(0);
+	}
+
+	public int changeStatus(State state) {
+
+		int patchStatus = 0;
+
+		if (state.getStateKind() == 0 ) {
+			patchStatus = StatusKind.ACCEPTING.value();
+		} else if (state.getStateKind() == StatusKind.ACCEPTING.value()) {
+			patchStatus = StatusKind.WAITING.value();
+		} else if (state.getStateKind() == StatusKind.WAITING.value()) {
+			patchStatus = StatusKind.ACCEPTING.value();
+		}
+
+		StringBuilder sql = new StringBuilder(
+				UPDATE_STATE.replace("{STATUS}", Integer.toString(patchStatus)).
+							replace("{TYPE}", Integer.toString(state.getSourceType())).
+							replace("{USERID}", state.getUserId()));
+
+		if (state.getGroupId() != null) {
+			sql.append("and group_id = '" + state.getGroupId() + "'");
+		}
+		if (state.getRoomId() != null) {
+			sql.append("and room_id = '" + state.getRoomId() + "'");
+		}
+
+		Query query = manager.createQuery(sql.toString());
+		int result = query.executeUpdate();
+		return result;
 	}
 }
