@@ -65,7 +65,7 @@ public class LineBotService {
 
 			} else {
 				state = new 
-						State.Builder(SourceType.ROOM.getCode(),
+						State.Builder(SourceType.USER.getCode(),
 										event.getSource().getUserId(),
 										StateKind.TASK.value(),
 										StatusKind.ACCEPTING.value()

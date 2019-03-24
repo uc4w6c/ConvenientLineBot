@@ -82,7 +82,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			key = "user_id";
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
-					+ "'" + StateKind.TASK.value() + "', "
+					+ StateKind.TASK.value() + "', "
 					+ StatusKind.ACCEPTING.value();
 			break;
 		}
@@ -91,7 +91,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
 					+ "'" + state.getGroupId() + "', "
-					+ "'" + StateKind.TASK.value() + "', "
+					+ StateKind.TASK.value() + "', "
 					+ StatusKind.ACCEPTING.value();
 			break;
 		}
@@ -100,7 +100,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
 					+ "'" + state.getRoomId() + "', "
-					+ "'" + StateKind.TASK.value() + "', "
+					+ StateKind.TASK.value() + ", "
 					+ StatusKind.ACCEPTING.value();
 			break;
 		}
