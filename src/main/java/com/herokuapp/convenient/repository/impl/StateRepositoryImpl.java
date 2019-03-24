@@ -84,6 +84,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 					+ "'" + state.getUserId() + "', "
 					+ "'" + StateKind.TASK.value() + "', "
 					+ StatusKind.ACCEPTING.value();
+			break;
 		}
 		case "GROUP" : {
 			key = "user_id, group_id";
