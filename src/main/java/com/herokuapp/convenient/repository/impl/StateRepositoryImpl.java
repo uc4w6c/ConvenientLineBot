@@ -55,11 +55,11 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 							 replace("{USERID}", userId) + " and ");
 
 		switch (type) {
-		case "GROUP" : {
+		case "group" : {
 			sql.append("group_id = '" + keyId + "'");
 			break;
 		}
-		case "ROOM": {
+		case "room": {
 			sql.append("room_id = '" + keyId + "'");
 			break;
 		}
@@ -78,7 +78,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		String key = null;
 		String value = null;
 		switch (CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName()) {
-		case "USER" : {
+		case "user" : {
 			key = "user_id";
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
@@ -86,7 +86,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 					+ StatusKind.ACCEPTING.value();
 			break;
 		}
-		case "GROUP" : {
+		case "group" : {
 			key = "user_id, group_id";
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
@@ -95,7 +95,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 					+ StatusKind.ACCEPTING.value();
 			break;
 		}
-		case "ROOM": {
+		case "room": {
 			key = "user_id, room_id";
 			value = state.getSourceType() + ", " 
 					+ "'" + state.getUserId() + "', "
