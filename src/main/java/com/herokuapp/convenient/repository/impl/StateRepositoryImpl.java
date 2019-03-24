@@ -17,13 +17,35 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	private StateRepository repository;
 
 	@Autowired
-	EntityManager manager;
+	private EntityManager manager;
 	
-	public List<State> findBySpec(String prop) {
+	public int findBySpec(String prop) {
 		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
 
-		String sql = "";
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT g From Goods g WHERE ");
 		Query query = manager.createQuery(sql.toString());
-		return query.getResultList();
+		List<State> states = query.getResultList();
+		return states.size();
+	}
+
+	public State fetchState(String userId) {
+		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT g From Goods g WHERE ");
+		Query query = manager.createQuery(sql.toString());
+		List<State> states = query.getResultList();
+		return states.get(0);
+	}
+
+	public State fetchState(String userId, String type, String keyId) {
+		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT g From Goods g WHERE ");
+		Query query = manager.createQuery(sql.toString());
+		List<State> states = query.getResultList();
+		return states.get(0);
 	}
 }

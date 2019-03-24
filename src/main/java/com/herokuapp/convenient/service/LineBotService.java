@@ -88,9 +88,6 @@ public class LineBotService {
 	}
 
 	private String stateStatusChange(State state) {
-		Root<State> root;
-		CriteriaQuery<?> criteriaQuery;
-		CriteriaBuilder criteriaBuilder;
 		
 		List<State> companies = this.stateRepository.findAll(Specifications
 				.where(Predicate(criteriaBuilder.equal(root.get("sourceType"), state.getSourceType()) )));
