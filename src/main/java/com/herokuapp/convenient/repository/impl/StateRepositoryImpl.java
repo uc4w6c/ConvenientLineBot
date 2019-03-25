@@ -24,7 +24,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	private EntityManager manager;
 	
 	private final String SELECT_STATE = "SELECT * FROM states "
-								+ "WHERE source_type = '{TYPE}' and "
+								+ "WHERE source_type = {TYPE} and "
 								+ "user_id = '{USERID}' ";
 
 	private final String INSERT_STATE = "INSERT INTO states "
@@ -39,7 +39,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	public State fetchState(String userId) {
 		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
 		StringBuilder sql = new StringBuilder(
-				SELECT_STATE.replace("{TYPE}", SourceType.USER.getName()).
+				SELECT_STATE.replace("{TYPE}", Integer.toString(SourceType.USER.getCode())).
 							 replace("{USERID}", userId));
 
 		Query query = manager.createQuery(sql.toString());
