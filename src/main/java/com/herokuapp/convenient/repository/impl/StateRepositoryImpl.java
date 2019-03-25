@@ -111,10 +111,11 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
 		
-		manager.getTransaction().begin();
-		Query query = manager.createNativeQuery(sql.toString());
+		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
+		manager2.getTransaction().begin();
+		Query query = manager2.createNativeQuery(sql.toString());
 		int result = query.executeUpdate();
-		manager.getTransaction().commit();
+		manager2.getTransaction().commit();
 		return result;
 		/**
 		try {
