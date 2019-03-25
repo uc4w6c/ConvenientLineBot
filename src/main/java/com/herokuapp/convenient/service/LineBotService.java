@@ -76,7 +76,37 @@ public class LineBotService {
 			break;
 		}
 		case END_REQUEST: {
-			
+			State state;
+			if (source instanceof GroupSource) {
+				state = new 
+						State.Builder(SourceType.GROUP.getCode(),
+										event.getSource().getUserId(),
+										StateKind.TASK.value(),
+										StatusKind.WAITING.value()
+									).
+							groupId( ((GroupSource) source).getGroupId() ).
+							build();
+
+			} else if (source instanceof RoomSource) {
+				state = new 
+						State.Builder(SourceType.ROOM.getCode(),
+										event.getSource().getUserId(),
+										StateKind.TASK.value(),
+										StatusKind.WAITING.value()
+									).
+							roomId( ((RoomSource) source).getRoomId() ).
+							build();
+
+			} else {
+				state = new 
+						State.Builder(SourceType.USER.getCode(),
+										event.getSource().getUserId(),
+										StateKind.TASK.value(),
+										StatusKind.WAITING.value()
+									).build();
+
+			}
+			replyMessage = stateStatusChange(state);
 			break;
 		}
 		default:
