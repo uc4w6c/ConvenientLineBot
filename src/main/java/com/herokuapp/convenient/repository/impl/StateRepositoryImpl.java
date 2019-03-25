@@ -44,6 +44,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		Query query = manager.createNativeQuery(sql.toString());
 		List<State> states = query.getResultList();
+		System.out.println(states.get(0).getUserId());
 		return (State)states.get(0);
 	}
 
