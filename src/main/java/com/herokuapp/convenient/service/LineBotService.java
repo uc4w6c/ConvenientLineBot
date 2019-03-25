@@ -121,16 +121,16 @@ public class LineBotService {
 
 		State nowState = null;
 		switch (CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName()) {
-		case "USER": {
+		case "user": {
 			nowState = this.stateRepositoryImpl.fetchState(state.getUserId());
 			break;
 		}
-		case "GROUP": {
+		case "group": {
 			nowState = this.stateRepositoryImpl.fetchState(state.getUserId(),
 					CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName(),
 					state.getGroupId());
 		}
-		case "ROOM": {
+		case "room": {
 			nowState = this.stateRepositoryImpl.fetchState(state.getUserId(),
 					CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName(),
 					state.getRoomId());
