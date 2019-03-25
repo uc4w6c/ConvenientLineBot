@@ -115,7 +115,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		Query query = manager.createNativeQuery(sql.toString());
 		int result = query.executeUpdate();
 		manager.getTransaction().commit();
-		
+		return result;
 		/**
 		try {
 			manager.getTransaction().begin();

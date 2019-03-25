@@ -115,11 +115,11 @@ public class LineBotService {
 		}
 
 		if (result == 0) {
-			return "ごめんにゃー。\\r\\n"
+			return "ごめんにゃー。 \r\n"
 					+ "エラーが発生したから再度試してみてにゃー";
 		}
 
-		return "こんにちはにゃー\\\\r\\\\n"
+		return "こんにちは \r\n"
 				+ "今からメモるにゃー";
 	}
 }
