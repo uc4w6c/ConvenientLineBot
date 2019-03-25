@@ -42,7 +42,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 				SELECT_STATE.replace("{TYPE}", Integer.toString(SourceType.USER.getCode())).
 							 replace("{USERID}", userId));
 
-		Query query = manager.createQuery(sql.toString());
+		Query query = manager.createNativeQuery(sql.toString());
 		List<State> states = query.getResultList();
 		return states.get(0);
 	}
