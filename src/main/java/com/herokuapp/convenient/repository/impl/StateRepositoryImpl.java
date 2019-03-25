@@ -24,7 +24,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	private EntityManager manager;
 	
 	private final String SELECT_STATE = "SELECT * FROM states "
-								+ "WHERE source_type = {TYPE} and "
+								+ "WHERE source_type = '{TYPE}' and "
 								+ "user_id = '{USERID}' ";
 
 	private final String INSERT_STATE = "INSERT INTO states "

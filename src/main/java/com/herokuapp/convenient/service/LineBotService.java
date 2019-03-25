@@ -135,6 +135,9 @@ public class LineBotService {
 					CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName(),
 					state.getRoomId());
 		}
+		default: {
+			break;
+		}
 		}
 
 		int result = 0;
