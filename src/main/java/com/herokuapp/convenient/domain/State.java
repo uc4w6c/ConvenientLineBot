@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "states")
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class State {
 	@Id
