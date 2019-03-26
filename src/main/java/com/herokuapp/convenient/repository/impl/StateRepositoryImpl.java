@@ -157,8 +157,16 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			sql.append("and room_id = '" + state.getRoomId() + "'");
 		}
 
+		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
+		manager2.getTransaction().begin();
+		Query query = manager2.createNativeQuery(sql.toString());
+		int result = query.executeUpdate();
+		manager2.getTransaction().commit();
+
+		/**
 		Query query = manager.createNamedQuery(sql.toString());
 		int result = query.executeUpdate();
+		**/
 		return result;
 	}
 }
