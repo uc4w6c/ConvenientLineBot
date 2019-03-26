@@ -31,18 +31,18 @@ public class State {
 	private Integer id;
 
 	@Column(nullable = false)
-	private final int sourceType;
+	private int sourceType;
 
 	@Column(nullable = false)
-	private final String userId;
+	private String userId;
 
-	private final String groupId;
+	private String groupId;
 
-	private final String roomId;
+	private String roomId;
 
-	private final int stateKind;
+	private int stateKind;
 
-	private final int status;
+	private int status;
 
 	@CreatedDate
 	@LastModifiedDate
