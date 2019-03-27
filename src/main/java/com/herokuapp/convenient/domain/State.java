@@ -15,15 +15,15 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "states")
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class State {
 	@Id
@@ -40,8 +40,10 @@ public class State {
 
 	private String roomId;
 
+	@Setter
 	private int stateKind;
 
+	@Setter
 	private int status;
 
 	@CreatedDate
@@ -95,6 +97,9 @@ public class State {
 			return new State(this);
 		}
 	}
+
+	// privateコンテキストにしてみた。データ取得時にセット出来ないかも。
+	private State() {}
 
 	private State(Builder builder) {
 		this.sourceType = builder.sourceType;

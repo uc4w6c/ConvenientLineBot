@@ -27,9 +27,18 @@ public class LineBotController {
 	}
 
 	@EventMapping
-	public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+		// Stateパターンを実装。
+		// 戻り値は汎用性を持たせるためにMessage型にしているので、
+		// 各実装クラス（ConcreteState）で選択する。
+
+		// 状態テーブルからデータを取得する → いや実装クラスから呼び出すようにしよう
+
+
+		// if文でこの後の処理を決める。
 		String message = lineBotService.makeReply(event);
-		//System.out.println("event: " + event);
+
+		// 戻り値はMessage型にする
 		return new TextMessage(message);
 	}
 
