@@ -11,11 +11,16 @@ import com.herokuapp.convenient.service.consts.CodeEnum;
 import com.herokuapp.convenient.service.consts.SourceType;
 import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
+import com.herokuapp.convenient.service.linebot.StateService;
+import com.herokuapp.convenient.service.linebot.TaskEndStateService;
+import com.herokuapp.convenient.service.linebot.TaskStartStateService;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.GroupSource;
 import com.linecorp.bot.model.event.source.RoomSource;
 import com.linecorp.bot.model.event.source.Source;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TextMessage;
 
 @Service
 public class LineBotService {
@@ -35,85 +40,65 @@ public class LineBotService {
 	 * @param event
 	 * @return String
 	 */
-	public String makeReply(MessageEvent<TextMessageContent> event) {
+	public Message makeReply(MessageEvent<TextMessageContent> event) {
 		String receivedMessage = event.getMessage().getText(); 
 		String replyMessage = null;
-		Source source = event.getSource();
+
+		State state = stateBuildByEvent(event);
+		StateService stateService = null;
 
 		switch (receivedMessage) {
 		case START_REQUEST: {
-			State state;
-			if (source instanceof GroupSource) {
-				state = new 
-						State.Builder(SourceType.GROUP.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.ACCEPTING.value()
-									).
-							groupId( ((GroupSource) source).getGroupId() ).
-							build();
-
-			} else if (source instanceof RoomSource) {
-				state = new 
-						State.Builder(SourceType.ROOM.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.ACCEPTING.value()
-									).
-							roomId( ((RoomSource) source).getRoomId() ).
-							build();
-
-			} else {
-				state = new 
-						State.Builder(SourceType.USER.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.ACCEPTING.value()
-									).build();
-
-			}
-			replyMessage = stateStatusChange(state);
+			stateService = new TaskStartStateService();
 			break;
 		}
 		case END_REQUEST: {
-			State state;
-			if (source instanceof GroupSource) {
-				state = new 
-						State.Builder(SourceType.GROUP.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.WAITING.value()
-									).
-							groupId( ((GroupSource) source).getGroupId() ).
-							build();
-
-			} else if (source instanceof RoomSource) {
-				state = new 
-						State.Builder(SourceType.ROOM.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.WAITING.value()
-									).
-							roomId( ((RoomSource) source).getRoomId() ).
-							build();
-
-			} else {
-				state = new 
-						State.Builder(SourceType.USER.getCode(),
-										event.getSource().getUserId(),
-										StateKind.TASK.value(),
-										StatusKind.WAITING.value()
-									).build();
-
-			}
-			replyMessage = stateStatusChange(state);
+			stateService = new TaskEndStateService();
 			break;
 		}
 		default:
 			break;
 		}
 
-		return replyMessage;
+		// 一旦nullチェックロジックを入れるけど、
+		// 後で上のswitch文で必ずセットするように変更したらロジック削除
+		if (stateService == null) {
+			return new TextMessage("");
+		}
+
+		stateService.stateStatusChange(state);
+		return stateService.createMessage(event);
+		//replyMessage = stateStatusChange(state);
+		//return replyMessage;
+	}
+
+	private State stateBuildByEvent(MessageEvent<TextMessageContent> event) {
+		Source source = event.getSource();
+		if (source instanceof GroupSource) {
+			return new State.Builder(SourceType.GROUP.getCode(),
+									event.getSource().getUserId(),
+									StateKind.TASK.value(),
+									StatusKind.WAITING.value()
+								).
+						groupId( ((GroupSource) source).getGroupId() ).
+						build();
+
+		} else if (source instanceof RoomSource) {
+			return new State.Builder(SourceType.ROOM.getCode(),
+									event.getSource().getUserId(),
+									StateKind.TASK.value(),
+									StatusKind.WAITING.value()
+								).
+						roomId( ((RoomSource) source).getRoomId() ).
+						build();
+
+		} else {
+			return new State.Builder(SourceType.USER.getCode(),
+									event.getSource().getUserId(),
+									StateKind.TASK.value(),
+									StatusKind.WAITING.value()
+								).build();
+		}
 	}
 
 	private String stateStatusChange(State state) {

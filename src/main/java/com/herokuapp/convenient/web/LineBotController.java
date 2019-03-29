@@ -36,10 +36,11 @@ public class LineBotController {
 
 
 		// if文でこの後の処理を決める。
-		String message = lineBotService.makeReply(event);
+		//String message = lineBotService.makeReply(event); 
 
 		// 戻り値はMessage型にする
-		return new TextMessage(message);
+		//return new TextMessage(message);
+		return lineBotService.makeReply(event);  
 	}
 
 	@EventMapping
