@@ -6,7 +6,7 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
-public class TaskStartStateService implements StateService {
+public class TaskEndState implements StateService {
 	public void stateStatusChange(State state) {
 		
 	};

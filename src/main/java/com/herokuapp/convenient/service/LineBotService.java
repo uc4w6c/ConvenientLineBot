@@ -12,8 +12,8 @@ import com.herokuapp.convenient.service.consts.SourceType;
 import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
 import com.herokuapp.convenient.service.linebot.StateService;
-import com.herokuapp.convenient.service.linebot.TaskEndStateService;
-import com.herokuapp.convenient.service.linebot.TaskStartStateService;
+import com.herokuapp.convenient.service.linebot.TaskEndState;
+import com.herokuapp.convenient.service.linebot.TaskStartState;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.GroupSource;
@@ -49,11 +49,11 @@ public class LineBotService {
 
 		switch (receivedMessage) {
 		case START_REQUEST: {
-			stateService = new TaskStartStateService();
+			stateService = new TaskStartState();
 			break;
 		}
 		case END_REQUEST: {
-			stateService = new TaskEndStateService();
+			stateService = new TaskEndState();
 			break;
 		}
 		default:
@@ -105,6 +105,7 @@ public class LineBotService {
 		// TODO:全体的にリファクタリングしたい
 
 		State nowState = null;
+		/**
 		switch (CodeEnum.getEnumByCode(SourceType.class, state.getSourceType()).getName()) {
 		case "user": {
 			nowState = this.stateRepositoryImpl.fetchState(state.getUserId());
@@ -124,6 +125,7 @@ public class LineBotService {
 			break;
 		}
 		}
+		**/
 
 		int result = 0;
 		if (nowState == null) {

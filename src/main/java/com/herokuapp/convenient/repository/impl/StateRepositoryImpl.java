@@ -22,10 +22,10 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 	@Autowired
 	private EntityManager manager;
-	
+
 	private final String SELECT_STATE = "SELECT * FROM states "
-								+ "WHERE source_type = {TYPE} and "
-								+ "user_id = '{USERID}' ";
+								+ "WHERE source_type = :type and "
+								+ "user_id = :userId";
 
 	private final String INSERT_STATE = "INSERT INTO states "
 								+ "(source_type, {KEY}, state_kind, status) "
@@ -36,44 +36,39 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 								+ "WHERE source_type = {TYPE} and "
 								+ "user_id = '{USERID}' ";
 
-	public State fetchState(String userId) {
-		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
-		StringBuilder sql = new StringBuilder(
-				SELECT_STATE.replace("{TYPE}", Integer.toString(SourceType.USER.getCode())).
-							 replace("{USERID}", userId));
+	public State fetchState(State state) {
+		int type = state.getSourceType();
+		Query query;
 
-		Query query = manager.createNativeQuery(sql.toString(), State.class);
+		if (type == SourceType.USER.getCode()) {
+			query = manager.createNativeQuery(SELECT_STATE, State.class)
+						.setParameter("type", state.getSourceType())
+						.setParameter("userId", state.getUserId());
+
+		} else if (type == SourceType.GROUP.getCode()) {
+			query = manager.createNativeQuery
+					(SELECT_STATE + " and group_id = :groupId", State.class)
+					.setParameter("type", state.getSourceType())
+					.setParameter("userId", state.getUserId())
+					.setParameter("groupId", state.getGroupId());
+
+		} else if (type == SourceType.ROOM.getCode()) {
+			query = manager.createNativeQuery
+					(SELECT_STATE + " and group_id = :groupId", State.class)
+					.setParameter("type", state.getSourceType())
+					.setParameter("userId", state.getUserId())
+					.setParameter("room_id", state.getRoomId());
+
+		} else {
+			throw new IllegalArgumentException("SourceTypeに設定の値が想定外の値です。");
+		}
+
 		List<State> states = query.getResultList();
+
 		if (states.size() == 0) {
 			return null;
 		}
 		return (State)states.get(0);
-	}
-
-	public State fetchState(String userId, String type, String keyId) {
-		//final EntityManager em = context.GetEntityManagerByManagedType(State.class);
-
-		StringBuilder sql = new StringBuilder(
-				SELECT_STATE.replace("{TYPE}", type).
-							 replace("{USERID}", userId) + " and ");
-
-		switch (type) {
-		case "group" : {
-			sql.append("group_id = '" + keyId + "'");
-			break;
-		}
-		case "room": {
-			sql.append("room_id = '" + keyId + "'");
-			break;
-		}
-		default: {
-			throw new IllegalArgumentException("typeに設定の値が想定外の値です。");
-		}
-		}
-
-		Query query = manager.createQuery(sql.toString());
-		List<State> states = query.getResultList();
-		return states.get(0);
 	}
 
 	public int insertStatus(State state) {
