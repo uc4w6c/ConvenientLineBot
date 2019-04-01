@@ -10,12 +10,12 @@ public interface StateService {
 	 * LineBotの受付状態を変更させる
 	 * @param state
 	 */
-	public abstract void stateStatusChange(State state);
+	public abstract State stateStatusChange(State state);
 
 	/**
 	 * Botで返却するメッセージを作成する
 	 * @param event
 	 * @return Message
 	 */
-	public abstract Message createMessage(MessageEvent<TextMessageContent> event);
+	public abstract Message createMessage(MessageEvent<TextMessageContent> event, State state);
 }

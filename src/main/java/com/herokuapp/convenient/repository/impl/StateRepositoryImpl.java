@@ -71,6 +71,15 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		return (State)states.get(0);
 	}
 
+	public State save(State state) {
+		State fetchState = this.fetchState(state);
+		if (fetchState == null) {
+			return repository.save(state);
+		}
+		State saveState = fetchState.changeKind(state.getStateKind(), state.getStatus());
+		return repository.save(saveState);
+	}
+
 	public int insertStatus(State state) {
 		
 		String key = null;

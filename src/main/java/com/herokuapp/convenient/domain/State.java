@@ -14,6 +14,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.herokuapp.convenient.service.consts.SourceType;
+import com.herokuapp.convenient.service.consts.StateKind;
+import com.herokuapp.convenient.service.consts.StatusKind;
+import com.linecorp.bot.model.event.source.GroupSource;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -109,5 +114,19 @@ public class State {
 		this.stateKind = builder.stateKind;
 		this.status = builder.status;
 		this.updatedAt = builder.updatedAt;
+	}
+
+	public State changeStatus(int status) {
+		return new State.Builder(this.sourceType, this.userId, this.stateKind, status)
+						.groupId(this.groupId)
+						.roomId(this.roomId)
+						.build();
+	}
+
+	public State changeKind(int kind, int status) {
+		return new State.Builder(this.sourceType, this.userId, kind, status)
+						.groupId(this.groupId)
+						.roomId(this.roomId)
+						.build();
 	}
 }

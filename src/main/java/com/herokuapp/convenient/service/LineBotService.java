@@ -67,8 +67,8 @@ public class LineBotService {
 		}
 
 		// このインターフェースのメソッド設計が微妙だな。変えたい。
-		stateService.stateStatusChange(state);
-		return stateService.createMessage(event);
+		State newState = stateService.stateStatusChange(state);
+		return stateService.createMessage(event, newState);
 		//replyMessage = stateStatusChange(state);
 		//return replyMessage;
 	}
