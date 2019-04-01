@@ -3,7 +3,6 @@ package com.herokuapp.convenient.service.linebot;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.herokuapp.convenient.domain.State;
-import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
 import com.herokuapp.convenient.service.consts.StatusKind;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -26,7 +25,6 @@ public class TaskStartState implements StateService {
 	};
 
 	public Message createMessage(MessageEvent<TextMessageContent> event, State state) {
-		Message message = new TextMessage(REPLY_MESSAGE);
-		return message;
+		return new TextMessage(REPLY_MESSAGE);
 	};
 }

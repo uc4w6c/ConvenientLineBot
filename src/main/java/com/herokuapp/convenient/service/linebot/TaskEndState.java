@@ -26,7 +26,6 @@ public class TaskEndState implements StateService {
 	};
 
 	public Message createMessage(MessageEvent<TextMessageContent> event, State state) {
-		Message message = new TextMessage(REPLY_MESSAGE);
-		return message;
+		return new TextMessage(REPLY_MESSAGE);
 	};
 }

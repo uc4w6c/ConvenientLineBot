@@ -20,8 +20,7 @@ public class TaskRecordState implements StateService {
 	@Autowired
 	private TaskRepository taskRepository;
 
-	private final String REPLY_MESSAGE = "メモをとり終わったにゃ \n\r"
-										+ "メモをみたかったら「メモ」って言ってにゃ!";
+	private final String REPLY_MESSAGE = "メモったにゃ!";
 
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
@@ -44,8 +43,10 @@ public class TaskRecordState implements StateService {
 						.roomId(state.getRoomId())
 						.build();
 
-		taskRepository.save(task);
-		Message message = new TextMessage("");
-		return message;
+		Task newTask = taskRepository.save(task);
+		if (newTask == null) {
+			return new TextMessage("");
+		}
+		return new TextMessage(REPLY_MESSAGE);
 	};
 }
