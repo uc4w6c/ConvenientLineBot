@@ -59,6 +59,7 @@ public class LineBotService {
 			break;
 		}
 
+		System.out.println(state);
 		// このインターフェースのメソッド設計が微妙だな。変えたい。
 		State newState = stateService.stateStatusChange(state);
 		return stateService.createMessage(event, newState);

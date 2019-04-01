@@ -22,8 +22,9 @@ import com.linecorp.bot.model.event.source.GroupSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
+@ToString // テスト用に追加
 @Entity
 @Table(name = "states")
 @Getter
@@ -45,10 +46,8 @@ public class State {
 
 	private String roomId;
 
-	@Setter
 	private int stateKind;
 
-	@Setter
 	private int status;
 
 	@CreatedDate
