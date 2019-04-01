@@ -24,7 +24,7 @@ public class TaskRecordState implements StateService {
 
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
-
+		System.out.println(state); // デバック用
 		State fetchState = stateRepositoryImpl.fetchState(state);
 		return fetchState;
 	};
