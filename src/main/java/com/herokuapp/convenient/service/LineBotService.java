@@ -42,7 +42,9 @@ public class LineBotService {
 	public Message makeReply(MessageEvent<TextMessageContent> event) {
 		String receivedMessage = event.getMessage().getText(); 
 		
+		System.out.println(event);
 		State state = stateBuildByEvent(event);
+		System.out.println(state);
 		StateService stateService = null;
 
 		switch (receivedMessage) {
