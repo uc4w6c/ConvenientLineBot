@@ -59,5 +59,4 @@ public class LineBotServiceTest {
 		String expectedValue = "こんにちは \r\n今からメモるにゃー";
 		assertThat(lineBotService.makeReply(event), is(expectedValue));
 	}
-
 }

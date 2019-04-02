@@ -18,16 +18,13 @@ public class TaskRecordState implements StateService {
 	private TaskRepository taskRepository;
 
 	// @Autowired
-	private StateRepositoryImpl stateRepositoryImpl;
+	// private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモったにゃ!";
-
-	public TaskRecordState() {
-		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
-	}
 	
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
+		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
 		State fetchState = stateRepositoryImpl.fetchState(state);
 		return fetchState;
 	};
