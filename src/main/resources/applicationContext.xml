@@ -1,10 +1,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
 	<bean id="taskStart" class="com.herokuapp.convenient.service.linebot.TaskStartState"/>
 	<bean id="taskEnd" class="com.herokuapp.convenient.service.linebot.TaskEndState"/>
 	<bean id="taskRecord" class="com.herokuapp.convenient.service.linebot.TaskRecordState"/>
+
+	<context:component-scan base-package="proptest" />
+	<context:property-placeholder location="classpath:/proptest/app.properties"/>
+
 </beans>

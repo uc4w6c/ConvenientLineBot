@@ -23,7 +23,7 @@ public class TaskRecordState implements StateService {
 	private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモったにゃ!";
-	
+
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
 		// StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
