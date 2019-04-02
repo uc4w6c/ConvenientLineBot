@@ -12,7 +12,8 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
-@ComponentScan("com.herokuapp.convenient.service.linebot")
+@Component
+@ComponentScan("com.herokuapp.convenient.repository.impl")
 public class TaskStartState implements StateService {
 
 	@Autowired
