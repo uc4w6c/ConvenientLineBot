@@ -10,7 +10,6 @@
 	<bean id="taskEnd" class="com.herokuapp.convenient.service.linebot.TaskEndState"/>
 	<bean id="taskRecord" class="com.herokuapp.convenient.service.linebot.TaskRecordState"/>
 
-	<context:component-scan base-package="proptest" />
-	<context:property-placeholder location="classpath:/proptest/app.properties"/>
+	<context:component-scan base-package="com.herokuapp.convenient.service.linebot" />
 
 </beans>
