@@ -12,6 +12,7 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
+@Component
 public class TaskRecordState implements StateService {
 
 	@Autowired
