@@ -1,6 +1,7 @@
 package com.herokuapp.convenient.service.linebot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.herokuapp.convenient.domain.State;
@@ -13,7 +14,7 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
-@Component
+@ComponentScan("com.herokuapp.convenient.service.linebot")
 public class TaskRecordState implements StateService {
 
 	@Autowired
