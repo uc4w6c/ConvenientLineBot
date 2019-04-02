@@ -1,6 +1,8 @@
 package com.herokuapp.convenient.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.herokuapp.convenient.domain.State;
@@ -47,24 +49,29 @@ public class LineBotService {
 		System.out.println(state);
 		StateService stateService = null;
 
-		switch (receivedMessage) {
-		case START_REQUEST: {
-			stateService = new TaskStartState();
-			break;
+		try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
+			switch (receivedMessage) {
+			case START_REQUEST: {
+				//stateService = new TaskStartState();
+				stateService = context.getBean(TaskStartState.class);
+				break;
+			}
+			case END_REQUEST: {
+				//stateService = new TaskEndState();
+				stateService = context.getBean(TaskEndState.class);
+				break;
+			}
+			default:
+				//stateService = new TaskRecordState();
+				stateService = context.getBean(TaskRecordState.class);
+				break;
+			}
+	
+			System.out.println(state);
+			// このインターフェースのメソッド設計が微妙だな。変えたい。
+			State newState = stateService.stateStatusChange(state);
+			return stateService.createMessage(event, newState);
 		}
-		case END_REQUEST: {
-			stateService = new TaskEndState();
-			break;
-		}
-		default:
-			stateService = new TaskRecordState();
-			break;
-		}
-
-		System.out.println(state);
-		// このインターフェースのメソッド設計が微妙だな。変えたい。
-		State newState = stateService.stateStatusChange(state);
-		return stateService.createMessage(event, newState);
 		//replyMessage = stateStatusChange(state);
 		//return replyMessage;
 	}
