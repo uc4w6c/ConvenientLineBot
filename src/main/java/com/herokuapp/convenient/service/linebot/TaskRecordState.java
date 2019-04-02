@@ -1,6 +1,7 @@
 package com.herokuapp.convenient.service.linebot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.herokuapp.convenient.domain.State;
 import com.herokuapp.convenient.domain.Task;
