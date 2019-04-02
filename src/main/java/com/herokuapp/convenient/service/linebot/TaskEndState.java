@@ -18,6 +18,10 @@ public class TaskEndState implements StateService {
 	private final String REPLY_MESSAGE = "メモをとり終わったにゃ \n\r"
 										+ "メモをみたかったら「メモ」って言ってにゃ!";
 
+	public TaskEndState() {
+		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
+	}
+
 	public State stateStatusChange(State state) {
 		State newState = state.changeStatus(StatusKind.WAITING.value());
 		State updateAfterState = stateRepositoryImpl.save(newState);

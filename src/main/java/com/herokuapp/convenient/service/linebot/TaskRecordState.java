@@ -15,16 +15,19 @@ import com.linecorp.bot.model.message.TextMessage;
 public class TaskRecordState implements StateService {
 
 	@Autowired
-	private StateRepositoryImpl stateRepositoryImpl;
-
-	@Autowired
 	private TaskRepository taskRepository;
+
+	// @Autowired
+	private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモったにゃ!";
 
+	public TaskRecordState() {
+		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
+	}
+	
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
-		System.out.println(state); // デバック用
 		State fetchState = stateRepositoryImpl.fetchState(state);
 		return fetchState;
 	};

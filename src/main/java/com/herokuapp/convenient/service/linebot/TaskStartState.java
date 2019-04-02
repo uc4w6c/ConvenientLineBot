@@ -12,11 +12,15 @@ import com.linecorp.bot.model.message.TextMessage;
 
 public class TaskStartState implements StateService {
 
-	@Autowired
+	//@Autowired
 	private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモをとるにゃー \n\r"
 										+ "「おわり」って言ったら終わるにゃ!";
+
+	public TaskStartState() {
+		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
+	}
 
 	public State stateStatusChange(State state) {
 		State newState = state.changeStatus(StatusKind.ACCEPTING.value());
