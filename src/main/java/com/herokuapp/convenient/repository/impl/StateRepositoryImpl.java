@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 
 import com.herokuapp.convenient.domain.State;
+import org.springframework.stereotype.Repository;
 import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.StateRepositoryCustom;
 import com.herokuapp.convenient.service.consts.CodeEnum;
@@ -16,6 +17,7 @@ import com.herokuapp.convenient.service.consts.SourceType;
 import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
 
+@Repository
 public class StateRepositoryImpl implements StateRepositoryCustom {
 	@Autowired
 	private StateRepository repository;
