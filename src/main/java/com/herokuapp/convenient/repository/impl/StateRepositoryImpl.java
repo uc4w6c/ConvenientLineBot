@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
@@ -21,11 +23,11 @@ import com.herokuapp.convenient.service.consts.StatusKind;
 
 @Component
 public class StateRepositoryImpl implements StateRepositoryCustom {
-	@Autowired
-	private StateRepository repository;
+	//@Autowired
+	//private StateRepository repository;
 
-	@Autowired
-	private EntityManager manager;
+	//@Autowired
+	//private EntityManager manager;
 
 	private final String SELECT_STATE = "SELECT * FROM states "
 								+ "WHERE source_type = :type and "
@@ -42,6 +44,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 	public State fetchState(State state) {
 		int type = state.getSourceType();
+		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
@@ -77,6 +80,9 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 	public State save(State state) {
 		State fetchState = this.fetchState(state);
+		
+		// TODO:DIでの方法を考えること
+		StateRepository repository = null;
 		if (fetchState == null) {
 			return repository.save(state);
 		}
@@ -122,6 +128,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
 		
+		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());
@@ -165,6 +172,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			sql.append("and room_id = '" + state.getRoomId() + "'");
 		}
 
+		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());

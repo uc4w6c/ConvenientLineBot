@@ -15,20 +15,19 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
 @Component
-@ComponentScan("com.herokuapp.convenient.repository.impl")
 public class TaskRecordState implements StateService {
 
-	@Autowired
-	private TaskRepository taskRepository;
+	//@Autowired
+	//private TaskRepository taskRepository;
 
-	@Autowired
-	private StateRepositoryImpl stateRepositoryImpl;
+	//@Autowired
+	//private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモったにゃ!";
 
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
-		// StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
+		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
 		State fetchState = stateRepositoryImpl.fetchState(state);
 		return fetchState;
 	};
@@ -40,6 +39,9 @@ public class TaskRecordState implements StateService {
 		if (state.getStatus() != StatusKind.ACCEPTING.value()) {
 			return new TextMessage("");
 		}
+
+		// TODO:ここのDI方法を考えること
+		TaskRepository taskRepository = null;
 
 		Task task = new Task.Builder(
 						state.getSourceType(), state.getUserId(), event.getMessage().getText())
