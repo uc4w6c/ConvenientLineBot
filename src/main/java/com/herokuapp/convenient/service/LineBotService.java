@@ -49,21 +49,21 @@ public class LineBotService {
 		System.out.println(state);
 		StateService stateService = null;
 
-		try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
+		//try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
 			switch (receivedMessage) {
 			case START_REQUEST: {
-				//stateService = new TaskStartState();
-				stateService = context.getBean(TaskStartState.class);
+				stateService = new TaskStartState();
+				//stateService = context.getBean(TaskStartState.class);
 				break;
 			}
 			case END_REQUEST: {
-				//stateService = new TaskEndState();
-				stateService = context.getBean(TaskEndState.class);
+				stateService = new TaskEndState();
+				//stateService = context.getBean(TaskEndState.class);
 				break;
 			}
 			default:
-				//stateService = new TaskRecordState();
-				stateService = context.getBean(TaskRecordState.class);
+				stateService = new TaskRecordState();
+				//stateService = context.getBean(TaskRecordState.class);
 				break;
 			}
 	
@@ -71,7 +71,7 @@ public class LineBotService {
 			// このインターフェースのメソッド設計が微妙だな。変えたい。
 			State newState = stateService.stateStatusChange(state);
 			return stateService.createMessage(event, newState);
-		}
+		//}
 		//replyMessage = stateStatusChange(state);
 		//return replyMessage;
 	}
