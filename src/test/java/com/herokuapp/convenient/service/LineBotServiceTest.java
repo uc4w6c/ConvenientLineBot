@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,6 +27,7 @@ import com.linecorp.bot.model.event.source.Source;
 import com.linecorp.bot.model.event.source.UserSource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration
 public class LineBotServiceTest {
 // TODO：Autowiredが思うように動かない。。。時間がある時に対応したい。
