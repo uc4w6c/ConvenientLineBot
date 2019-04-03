@@ -26,8 +26,8 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	//@Autowired
 	//private StateRepository repository;
 
-	//@Autowired
-	//private EntityManager manager;
+	@Autowired
+	private EntityManager manager;
 
 	private final String SELECT_STATE = "SELECT * FROM states "
 								+ "WHERE source_type = :type and "
@@ -44,7 +44,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 	public State fetchState(State state) {
 		int type = state.getSourceType();
-		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
@@ -128,7 +128,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
 		
-		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());
@@ -172,7 +172,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 			sql.append("and room_id = '" + state.getRoomId() + "'");
 		}
 
-		EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());
