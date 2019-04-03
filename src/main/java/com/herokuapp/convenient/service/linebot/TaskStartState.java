@@ -13,7 +13,7 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
 @Component
-@ComponentScan("com.herokuapp.convenient.repository.impl")
+//@ComponentScan("com.herokuapp.convenient.repository.impl")
 public class TaskStartState implements StateService {
 
 	@Autowired
