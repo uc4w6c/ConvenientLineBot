@@ -9,7 +9,6 @@ curl
  -H 'Content-Type: application/json'
  -H 'X-Line-Signature: 3q8QXTAGaey18yL8FWTqdVlbMr6hcuNvM4tefa0o9nA='
  -d '{
-  "destination": "xxxxxxxxxx", 
   "events": [
     {
       "replyToken": "0f3779fba3b349968c5d07db31eab56f",
