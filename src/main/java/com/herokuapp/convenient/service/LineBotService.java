@@ -48,22 +48,23 @@ public class LineBotService {
 		State state = stateBuildByEvent(event);
 		System.out.println(state);
 		StateService stateService = null;
-
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		
 		//try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
 			switch (receivedMessage) {
 			case START_REQUEST: {
-				stateService = new TaskStartState();
-				//stateService = context.getBean(TaskStartState.class);
+				//stateService = new TaskStartState();
+				stateService = ctx.getBean(TaskStartState.class);
 				break;
 			}
 			case END_REQUEST: {
-				stateService = new TaskEndState();
-				//stateService = context.getBean(TaskEndState.class);
+				//stateService = new TaskEndState();
+				stateService = ctx.getBean(TaskEndState.class);
 				break;
 			}
 			default:
-				stateService = new TaskRecordState();
-				//stateService = context.getBean(TaskRecordState.class);
+				//stateService = new TaskRecordState();
+				stateService = ctx.getBean(TaskRecordState.class);
 				break;
 			}
 	

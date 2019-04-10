@@ -6,6 +6,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
@@ -26,7 +27,9 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	//@Autowired
 	//private StateRepository repository;
 
-	@Autowired
+	//@Autowired
+	//private EntityManager manager;
+	@PersistenceContext
 	private EntityManager manager;
 
 	private final String SELECT_STATE = "SELECT * FROM states "
@@ -45,6 +48,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 	public State fetchState(State state) {
 		int type = state.getSourceType();
 		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = emf.createEntityManager();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
@@ -129,6 +133,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		String sql = INSERT_STATE.replace("{KEY}", key).replace("{VALUE}", value);
 		
 		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = emf.createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());
@@ -173,6 +178,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		}
 
 		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
+		//EntityManager manager = emf.createEntityManager();
 		EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
 		manager2.getTransaction().begin();
 		Query query = manager2.createNativeQuery(sql.toString());
