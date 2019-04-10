@@ -1,6 +1,9 @@
 package com.herokuapp.convenient.service;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
@@ -48,8 +51,10 @@ public class LineBotService {
 		State state = stateBuildByEvent(event);
 		System.out.println(state);
 		StateService stateService = null;
-		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		
+		//ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		//BeanFactory factory = new ClassPathXmlApplicationContext("applicationContext.xml");
+
 		//try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
 			switch (receivedMessage) {
 			case START_REQUEST: {

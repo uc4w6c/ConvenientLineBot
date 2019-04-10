@@ -19,11 +19,12 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	-->
 
-	<!--  
+	<!-- 
 	<bean id="taskStart" class="com.herokuapp.convenient.service.linebot.TaskStartState"/>
 	<bean id="taskEnd" class="com.herokuapp.convenient.service.linebot.TaskEndState"/>
 	<bean id="taskRecord" class="com.herokuapp.convenient.service.linebot.TaskRecordState"/>
 	-->
+
 	<!-- persistence.xml の位置指定や LTW 等の設定も可能な FactoryBean -->
 	<!-- 
 	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -35,6 +36,7 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 	-->
 
 	<!-- EntityManagerの設定 -->
+	<!--
     <bean id="entityManagerFactory"
         class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -49,17 +51,23 @@ http://www.springframework.org/schema/jee http://www.springframework.org/schema/
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+	 -->
 	<!-- DB接続用の設定 -->
+	<!--
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="url" value="jdbc:${DATABASE_URL}" />
         <property name="username" value="${PSQL_USERNAME}" />
         <property name="password" value="${PSQL_PASSWORD}" />
     </bean>
+	-->
 
-	<!-- <context:component-scan base-package="com.herokuapp.convenient.service.linebot" /> -->
+	<context:component-scan base-package="com.herokuapp.convenient" />
+	<!--  <context:component-scan base-package="com.herokuapp.convenient.service.linebot" /> -->
+	<!-- 
 	<context:component-scan base-package="com.herokuapp.convenient.repository.impl" />
 	<context:component-scan base-package="org.springframework.orm.jpa" />
+	-->
 
 	<!--  
 	<context:component-scan base-package="com.herokuapp.convenient.service.linebot.TaskStartState" />
