@@ -33,14 +33,14 @@ public class TaskLoadState implements StateService {
 						.roomId(state.getRoomId())
 						.build();
 
-		List<String> todoList = taskRepository
+		List<Task> tasks = taskRepository
 							.findAllOrderByCreatedAt(task.getSourceType(),
 													task.getUserId(),
 													task.getGroupId(),
 													task.getRoomId());
 		String replyMessage = "";
-		for (String todo : todoList) {
-			replyMessage = replyMessage + todo + "\r\n"; 
+		for (Task taskTodo : tasks) {
+			replyMessage = replyMessage + taskTodo.getTodoText() + "\r\n"; 
 		}
 		return new TextMessage(replyMessage);
 	};

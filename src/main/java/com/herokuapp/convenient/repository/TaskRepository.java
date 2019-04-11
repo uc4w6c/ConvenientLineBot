@@ -12,14 +12,14 @@ import com.herokuapp.convenient.domain.Task;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
-	@Query("SELECT todo_text FROM tasks "
-			+ "WHERE source_type = :source_type"
-			+ " and user_id = :user_id"
-			+ " and group_id = :group_id"
-			+ " and room_id = :room_id")
-	List<String> findAllOrderByCreatedAt(@Param("source_type") int sourceType,
-										@Param("user_id") String userId,
-										@Param("group_id") String groupId,
-										@Param("room_id") String roomId);
+	@Query(value = "SELECT task FROM Task task "
+					+ "WHERE task.sourceType = :sourceType"
+					+ " and task.userId = :userId"
+					+ " and task.groupId = :groupId"
+					+ " and task.roomId = :roomId")
+	List<Task> findAllOrderByCreatedAt(@Param("sourceType") int sourceType,
+										@Param("userId") String userId,
+										@Param("groupId") String groupId,
+										@Param("roomId") String roomId);
 
 }

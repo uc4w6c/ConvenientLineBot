@@ -50,6 +50,7 @@ public class Task {
 	private LocalTime deletedAt;
 
 	public static class Builder {
+		private Integer id;
 		private int sourceType;
 		private String userId;
 		private String groupId;
@@ -71,6 +72,10 @@ public class Task {
 			this.todoText = todoText;
 		}
 
+		public Builder id(Integer id) {
+			this.id = id;
+			return this;
+		}
 		public Builder groupId(String groupId) {
 			this.groupId = groupId;
 			return this;
@@ -102,6 +107,7 @@ public class Task {
 	private Task() { }
 	
 	private Task(Builder builder) {
+		this.id = builder.id;
 		this.sourceType = builder.sourceType;
 		this.userId = builder.userId;
 		this.groupId = builder.groupId;
