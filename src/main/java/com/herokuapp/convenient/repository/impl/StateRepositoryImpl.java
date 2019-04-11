@@ -24,13 +24,13 @@ import com.herokuapp.convenient.service.consts.StatusKind;
 
 @Component
 public class StateRepositoryImpl implements StateRepositoryCustom {
-	//@Autowired
-	//private StateRepository repository;
+	@Autowired
+	private StateRepository repository;
 
-	//@Autowired
-	//private EntityManager manager;
-	@PersistenceContext
+	@Autowired
 	private EntityManager manager;
+	//@PersistenceContext
+	//private EntityManager manager;
 
 	private final String SELECT_STATE = "SELECT * FROM states "
 								+ "WHERE source_type = :type and "
@@ -49,6 +49,9 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 		int type = state.getSourceType();
 		//EntityManager manager = Persistence.createEntityManagerFactory("restaurant").createEntityManager();
 		//EntityManager manager = emf.createEntityManager();
+
+		//EntityManager manager2 = manager.getEntityManagerFactory().createEntityManager();
+		//manager2.getTransaction().begin();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
@@ -84,9 +87,9 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 	public State save(State state) {
 		State fetchState = this.fetchState(state);
-		
+
 		// TODO:DIでの方法を考えること
-		StateRepository repository = null;
+		// StateRepository repository = null;
 		if (fetchState == null) {
 			return repository.save(state);
 		}

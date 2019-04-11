@@ -55,6 +55,7 @@ public class State {
 	private LocalTime updatedAt;
 
 	public static class Builder {
+		private Integer id;
 		private int sourceType;
 		private String userId;
 		private String groupId;
@@ -75,6 +76,11 @@ public class State {
 			this.userId = userId;
 			this.stateKind = stateKind;
 			this.status = status;
+		}
+
+		public Builder id(Integer id) {
+			this.id = id;
+			return this;
 		}
 
 		public Builder groupId(String groupId) {
@@ -106,6 +112,7 @@ public class State {
 	private State() {}
 
 	private State(Builder builder) {
+		this.id = builder.id;
 		this.sourceType = builder.sourceType;
 		this.userId = builder.userId;
 		this.groupId = builder.groupId;
@@ -117,6 +124,7 @@ public class State {
 
 	public State changeStatus(int status) {
 		return new State.Builder(this.sourceType, this.userId, this.stateKind, status)
+						.id(this.id)
 						.groupId(this.groupId)
 						.roomId(this.roomId)
 						.build();
@@ -124,6 +132,7 @@ public class State {
 
 	public State changeKind(int kind, int status) {
 		return new State.Builder(this.sourceType, this.userId, kind, status)
+						.id(this.id)
 						.groupId(this.groupId)
 						.roomId(this.roomId)
 						.build();

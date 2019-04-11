@@ -17,6 +17,7 @@ import com.herokuapp.convenient.service.consts.StateKind;
 import com.herokuapp.convenient.service.consts.StatusKind;
 import com.herokuapp.convenient.service.linebot.StateService;
 import com.herokuapp.convenient.service.linebot.TaskEndState;
+import com.herokuapp.convenient.service.linebot.TaskLoadState;
 import com.herokuapp.convenient.service.linebot.TaskRecordState;
 import com.herokuapp.convenient.service.linebot.TaskStartState;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -36,9 +37,19 @@ public class LineBotService {
 
 	@Autowired
 	TaskRepository taskRepository;
-	
+
+	@Autowired
+	TaskStartState taskStartState;
+	@Autowired
+	TaskEndState taskEndState;
+	@Autowired
+	TaskRecordState taskRecordState;
+	@Autowired
+	TaskLoadState taskLoadState;
+
 	private final String START_REQUEST = "にゃー";
 	private final String END_REQUEST = "おわり";
+	private final String MEMO_REQUEST = "メモ";
 	/** 
 	 * 取得したメッセージから返却するメッセージを決める
 	 * @param event
@@ -47,33 +58,37 @@ public class LineBotService {
 	public Message makeReply(MessageEvent<TextMessageContent> event) {
 		String receivedMessage = event.getMessage().getText(); 
 		
-		System.out.println(event);
 		State state = stateBuildByEvent(event);
-		System.out.println(state);
 		StateService stateService = null;
 		//ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		//ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 		//BeanFactory factory = new ClassPathXmlApplicationContext("applicationContext.xml");
 
 		//try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
 			switch (receivedMessage) {
 			case START_REQUEST: {
 				//stateService = new TaskStartState();
-				stateService = ctx.getBean(TaskStartState.class);
+				//stateService = ctx.getBean(TaskStartState.class);
+				stateService = taskStartState;
 				break;
 			}
 			case END_REQUEST: {
 				//stateService = new TaskEndState();
-				stateService = ctx.getBean(TaskEndState.class);
+				//stateService = ctx.getBean(TaskEndState.class);
+				stateService = taskEndState;
+				break;
+			}
+			case MEMO_REQUEST: {
+				stateService = taskLoadState;
 				break;
 			}
 			default:
 				//stateService = new TaskRecordState();
-				stateService = ctx.getBean(TaskRecordState.class);
+				//stateService = ctx.getBean(TaskRecordState.class);
+				stateService = taskRecordState;
 				break;
 			}
 	
-			System.out.println(state);
 			// このインターフェースのメソッド設計が微妙だな。変えたい。
 			State newState = stateService.stateStatusChange(state);
 			return stateService.createMessage(event, newState);

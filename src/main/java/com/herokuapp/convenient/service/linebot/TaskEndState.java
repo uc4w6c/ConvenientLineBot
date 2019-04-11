@@ -15,14 +15,14 @@ import com.linecorp.bot.model.message.TextMessage;
 @Component
 public class TaskEndState implements StateService {
 
-	//@Autowired
-	//private StateRepositoryImpl stateRepositoryImpl;
+	@Autowired
+	private StateRepositoryImpl stateRepositoryImpl;
 
 	private final String REPLY_MESSAGE = "メモをとり終わったにゃ \n\r"
 										+ "メモをみたかったら「メモ」って言ってにゃ!";
 
 	public State stateStatusChange(State state) {
-		StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
+		//StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
 		State newState = state.changeStatus(StatusKind.WAITING.value());
 		State updateAfterState = stateRepositoryImpl.save(newState);
 		return updateAfterState;

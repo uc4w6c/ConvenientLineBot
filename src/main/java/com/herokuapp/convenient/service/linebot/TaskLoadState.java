@@ -1,5 +1,7 @@
 package com.herokuapp.convenient.service.linebot;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -15,41 +17,31 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
 @Component
-public class TaskRecordState implements StateService {
+public class TaskLoadState implements StateService {
 
 	@Autowired
 	private TaskRepository taskRepository;
 
-	@Autowired
-	private StateRepositoryImpl stateRepositoryImpl;
-
-	private final String REPLY_MESSAGE = "メモったにゃ!";
-
 	public State stateStatusChange(State state) {
-		// 一旦は何も更新せずに返却（将来的には受付回数をカウントとかしようかな）
-		//StateRepositoryImpl stateRepositoryImpl = new StateRepositoryImpl();
-		State fetchState = stateRepositoryImpl.fetchState(state);
-		return fetchState;
+		// 一旦は何も更新せずに返却
+		return state;
 	};
 	public Message createMessage(MessageEvent<TextMessageContent> event, State state) {
-		if (state == null) {
-			return new TextMessage("");
-		}
-
-		if (state.getStatus() != StatusKind.ACCEPTING.value()) {
-			return new TextMessage("");
-		}
-
 		Task task = new Task.Builder(
 						state.getSourceType(), state.getUserId(), event.getMessage().getText())
 						.groupId(state.getGroupId())
 						.roomId(state.getRoomId())
 						.build();
 
-		Task newTask = taskRepository.save(task);
-		if (newTask == null) {
-			return new TextMessage("");
+		List<String> todoList = taskRepository
+							.findAllOrderByCreatedAt(task.getSourceType(),
+													task.getUserId(),
+													task.getGroupId(),
+													task.getRoomId());
+		String replyMessage = "";
+		for (String todo : todoList) {
+			replyMessage = replyMessage + todo + "\r\n"; 
 		}
-		return new TextMessage(REPLY_MESSAGE);
+		return new TextMessage(replyMessage);
 	};
 }
