@@ -37,25 +37,25 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 								+ "WHERE source_type = :type and "
 								+ "user_id = :userId";
 
-	public Task fetchState(State state) {
+	public List<Task> fetchState(State state) {
 		int type = state.getSourceType();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
-			query = manager.createNativeQuery(SELECT_TASK, State.class)
+			query = manager.createNativeQuery(SELECT_TASK, Task.class)
 						.setParameter("type", state.getSourceType())
 						.setParameter("userId", state.getUserId());
 
 		} else if (type == SourceType.GROUP.getCode()) {
 			query = manager.createNativeQuery
-					(SELECT_TASK + " and group_id = :groupId", State.class)
+					(SELECT_TASK + " and group_id = :groupId", Task.class)
 					.setParameter("type", state.getSourceType())
 					.setParameter("userId", state.getUserId())
 					.setParameter("groupId", state.getGroupId());
 
 		} else if (type == SourceType.ROOM.getCode()) {
 			query = manager.createNativeQuery
-					(SELECT_TASK + " and group_id = :groupId", State.class)
+					(SELECT_TASK + " and group_id = :groupId", Task.class)
 					.setParameter("type", state.getSourceType())
 					.setParameter("userId", state.getUserId())
 					.setParameter("room_id", state.getRoomId());
@@ -64,11 +64,6 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 			throw new IllegalArgumentException("SourceTypeに設定の値が想定外の値です。");
 		}
 
-		List<Task> tasks = query.getResultList();
-
-		if (tasks.size() == 0) {
-			return null;
-		}
-		return (Task)tasks.get(0);
+		return query.getResultList();
 	}
 }

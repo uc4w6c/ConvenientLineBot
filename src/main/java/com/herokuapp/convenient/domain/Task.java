@@ -13,8 +13,6 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.herokuapp.convenient.domain.State.Builder;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -63,8 +61,7 @@ public class Task {
 		 * 
 		 * @param sourceType
 		 * @param userId
-		 * @param stateKind
-		 * @param status
+		 * @param todoText
 		 */
 		public Builder(int sourceType, String userId, String todoText) {
 			this.sourceType = sourceType;

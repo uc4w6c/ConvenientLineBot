@@ -8,6 +8,7 @@ import com.herokuapp.convenient.domain.State;
 import com.herokuapp.convenient.domain.Task;
 import com.herokuapp.convenient.repository.TaskRepository;
 import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
+import com.herokuapp.convenient.repository.impl.TaskRepositoryImpl;
 import com.herokuapp.convenient.service.consts.StatusKind;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -45,7 +46,7 @@ public class TaskRecordState implements StateService {
 						.groupId(state.getGroupId())
 						.roomId(state.getRoomId())
 						.build();
-
+		
 		Task newTask = taskRepository.save(task);
 		if (newTask == null) {
 			return new TextMessage("");
