@@ -65,33 +65,33 @@ public class LineBotService {
 		//BeanFactory factory = new ClassPathXmlApplicationContext("applicationContext.xml");
 
 		//try (ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml")) {
-			switch (receivedMessage) {
-			case START_REQUEST: {
-				//stateService = new TaskStartState();
-				//stateService = ctx.getBean(TaskStartState.class);
-				stateService = taskStartState;
-				break;
-			}
-			case END_REQUEST: {
-				//stateService = new TaskEndState();
-				//stateService = ctx.getBean(TaskEndState.class);
-				stateService = taskEndState;
-				break;
-			}
-			case MEMO_REQUEST: {
-				stateService = taskLoadState;
-				break;
-			}
-			default:
-				//stateService = new TaskRecordState();
-				//stateService = ctx.getBean(TaskRecordState.class);
-				stateService = taskRecordState;
-				break;
-			}
+		switch (receivedMessage) {
+		case START_REQUEST: {
+			//stateService = new TaskStartState();
+			//stateService = ctx.getBean(TaskStartState.class);
+			stateService = taskStartState;
+			break;
+		}
+		case END_REQUEST: {
+			//stateService = new TaskEndState();
+			//stateService = ctx.getBean(TaskEndState.class);
+			stateService = taskEndState;
+			break;
+		}
+		case MEMO_REQUEST: {
+			stateService = taskLoadState;
+			break;
+		}
+		default:
+			//stateService = new TaskRecordState();
+			//stateService = ctx.getBean(TaskRecordState.class);
+			stateService = taskRecordState;
+			break;
+		}
 	
-			// このインターフェースのメソッド設計が微妙だな。変えたい。
-			State newState = stateService.stateStatusChange(state);
-			return stateService.createMessage(event, newState);
+		// このインターフェースのメソッド設計が微妙だな。変えたい。
+		State newState = stateService.stateStatusChange(state);
+		return stateService.createMessage(event, newState);
 		//}
 		//replyMessage = stateStatusChange(state);
 		//return replyMessage;
