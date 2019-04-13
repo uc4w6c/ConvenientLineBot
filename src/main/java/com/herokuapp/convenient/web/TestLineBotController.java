@@ -1,4 +1,3 @@
-/**
 package com.herokuapp.convenient.web;
 
 import org.springframework.stereotype.Controller;
@@ -49,4 +48,3 @@ public class TestLineBotController {
 		return body;
 	}
 }
-**/
