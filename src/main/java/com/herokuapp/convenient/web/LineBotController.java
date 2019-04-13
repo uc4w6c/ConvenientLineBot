@@ -1,7 +1,5 @@
 package com.herokuapp.convenient.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.herokuapp.convenient.service.LineBotService;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -15,8 +13,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
-import lombok.extern.slf4j.Slf4j;
-
 @LineMessageHandler
 public class LineBotController {
 
@@ -28,18 +24,6 @@ public class LineBotController {
 
 	@EventMapping
 	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
-		// Stateパターンを実装。
-		// 戻り値は汎用性を持たせるためにMessage型にしているので、
-		// 各実装クラス（ConcreteState）で選択する。
-
-		// 状態テーブルからデータを取得する → いや実装クラスから呼び出すようにしよう
-
-
-		// if文でこの後の処理を決める。
-		//String message = lineBotService.makeReply(event); 
-
-		// 戻り値はMessage型にする
-		//return new TextMessage(message);
 		return lineBotService.makeReply(event);  
 	}
 
