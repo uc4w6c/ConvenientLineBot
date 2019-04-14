@@ -23,7 +23,7 @@ public class LineBotController {
 	}
 
 	@EventMapping
-	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event, String msg) {
+	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
 		return lineBotService.makeReply(event);  
 	}
 
