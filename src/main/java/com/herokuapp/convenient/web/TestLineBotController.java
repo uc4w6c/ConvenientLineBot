@@ -1,8 +1,10 @@
 package com.herokuapp.convenient.web;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @RestController
 @RequestMapping("/linebot")
@@ -20,8 +23,18 @@ public class TestLineBotController {
 
 	private final LineBotService lineBotService;
 
-	public TestLineBotController(LineBotService lineBotService) {
+	private final ConfigurableApplicationContext applicationContext;
+
+	public TestLineBotController(LineBotService lineBotService,
+						final ConfigurableApplicationContext applicationContext) {
 		this.lineBotService = lineBotService;
+		this.applicationContext = applicationContext;
+	}
+
+	@GetMapping(path = "test")
+	public void result() {
+		System.out.print("LineMessageHandler:");
+		System.out.println(applicationContext.getBeansWithAnnotation(LineMessageHandler.class));
 	}
 
 	@PostMapping(path = "create")
