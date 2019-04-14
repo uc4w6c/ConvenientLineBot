@@ -1,5 +1,6 @@
 package com.herokuapp.convenient.web;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +51,7 @@ public class TestLineBotController {
 				applicationContext.getBeansWithAnnotation(LineMessageHandler.class);
 		System.out.println(handlerBeanMap);
 
+		System.out.println("EventMapping:" + EventMapping.class.getName());
 		// EventMappingのアノテーションがついたメソッドを取得する
 		System.out.print("HandlerMethod:");
 		handlerBeanMap
@@ -62,8 +64,14 @@ public class TestLineBotController {
 					final EventMapping mapping = AnnotatedElementUtils.getMergedAnnotation(method, EventMapping.class);
 					if (mapping == null) {
 						System.out.println(method.getName() + ":Null");
+					} else {
+						System.out.println(method.getName() + ":Not Null");
 					}
-					System.out.println(method.getName() + ":Not Null");
+
+					// 対象メソッドにアノテーションがついているか調査
+					for (Annotation[] annotation : method.getParameterAnnotations()) {
+						System.out.println(annotation.getClass());
+					}
 				}
 			});
 	}
