@@ -1,7 +1,16 @@
 package com.herokuapp.convenient.web;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +24,7 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @RestController
@@ -34,7 +44,26 @@ public class TestLineBotController {
 	@GetMapping(path = "test")
 	public void result() {
 		System.out.print("LineMessageHandler:");
-		System.out.println(applicationContext.getBeansWithAnnotation(LineMessageHandler.class));
+
+		final Map<String, Object> handlerBeanMap =
+				applicationContext.getBeansWithAnnotation(LineMessageHandler.class);
+		System.out.println(handlerBeanMap);
+
+		System.out.print("HandlerMethod:");
+		handlerBeanMap
+			.values().stream()
+			.forEach((Object bean) -> {
+				final Method[] uniqueDeclaredMethods =
+						ReflectionUtils.getUniqueDeclaredMethods(bean.getClass());
+
+				for (Method method : uniqueDeclaredMethods) {
+					final EventMapping mapping = AnnotatedElementUtils.getMergedAnnotation(method, EventMapping.class);
+					if (mapping == null) {
+						System.out.println(method.getName() + ":Null");
+					}
+					System.out.println(method.getName() + ":Not Null");
+				}
+			});
 	}
 
 	@PostMapping(path = "create")
