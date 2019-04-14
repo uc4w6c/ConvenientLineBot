@@ -45,10 +45,12 @@ public class TestLineBotController {
 	public void result() {
 		System.out.print("LineMessageHandler:");
 
+		// LineMessageHandlerのアノテーションがついたクラスを取得する
 		final Map<String, Object> handlerBeanMap =
 				applicationContext.getBeansWithAnnotation(LineMessageHandler.class);
 		System.out.println(handlerBeanMap);
 
+		// EventMappingのアノテーションがついたメソッドを取得する
 		System.out.print("HandlerMethod:");
 		handlerBeanMap
 			.values().stream()
