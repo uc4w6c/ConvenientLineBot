@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 //@EnableSpringConfigured
 @SpringBootApplication
-@EntityScan(basePackageClasses = {ConvenientLineBotApplication.class, Jsr310JpaConverters.class})
+//@EntityScan(basePackageClasses = {ConvenientLineBotApplication.class, Jsr310JpaConverters.class})
 public class ConvenientLineBotApplication {
 
 	public static void main(String[] args) {

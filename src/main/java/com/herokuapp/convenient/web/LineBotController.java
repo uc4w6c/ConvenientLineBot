@@ -33,11 +33,6 @@ public class LineBotController {
 	}
 
 	@EventMapping
-	public TextMessage testEvent(MessageEvent<TextMessageContent> event) {
-		return new TextMessage("test");
-	}
-
-	@EventMapping
 	public void handleDefaultMessageEvent(Event event) {
 		System.out.println("event: " + event);
 	}
