@@ -18,17 +18,18 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 @LineMessageHandler
 public class LineBotController {
 
-	@Autowired
-	private LineBotService lineBotService;
 	//private final LineBotService lineBotService;
 
 	//public LineBotController(LineBotService lineBotService) {
 	//	this.lineBotService = lineBotService;
 	//}
 
+	@Autowired
+	private LineBotService lineBotService;
+
 	@EventMapping
 	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
-		return lineBotService.makeReply(event);  
+		return lineBotService.makeReply(event);
 	}
 
 	@EventMapping
