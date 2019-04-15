@@ -1,5 +1,7 @@
 package com.herokuapp.convenient.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.herokuapp.convenient.service.LineBotService;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -16,13 +18,16 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 @LineMessageHandler
 public class LineBotController {
 
-	private final LineBotService lineBotService;
+	@Autowired
+	private LineBotService lineBotService;
+	//private final LineBotService lineBotService;
 
-	public LineBotController(LineBotService lineBotService) {
-		this.lineBotService = lineBotService;
-	}
+	//public LineBotController(LineBotService lineBotService) {
+	//	this.lineBotService = lineBotService;
+	//}
 
-	@EventMapping public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+	@EventMapping
+	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
 		return lineBotService.makeReply(event);  
 	}
 
