@@ -25,7 +25,7 @@ public class LineBotController2 {
 	}
 
 	@EventMapping
-	public Message testEvent(MessageEvent<TextMessageContent> event) {
-		return lineBotService.makeReply(event);  
+	public TextMessage testEvent(MessageEvent<TextMessageContent> event) {
+		return (TextMessage)lineBotService.makeReply(event);  
 	}
 }
