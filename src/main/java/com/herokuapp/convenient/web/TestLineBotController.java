@@ -69,8 +69,11 @@ public class TestLineBotController {
 					}
 
 					// 対象メソッドにアノテーションがついているか調査
-					for (Annotation[] annotation : method.getParameterAnnotations()) {
-						System.out.println(annotation.getClass());
+					// for (Annotation[] annotation : method.getParameterAnnotations()) {
+					// 	System.out.println(annotation);
+					// }
+					for (Annotation annotation : method.getAnnotations()) {
+						System.out.println(annotation.annotationType());
 					}
 				}
 			});
