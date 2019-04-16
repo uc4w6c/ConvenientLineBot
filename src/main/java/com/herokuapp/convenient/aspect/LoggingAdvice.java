@@ -23,6 +23,7 @@ public class LoggingAdvice {
 		this.logger = LoggerFactory.getLogger(getClass());
 	}
 
+	/**
 	@Before("execution(* com.herokuapp.convenient.web.*.*(..))")
 	public void invokeApiControllerBefore(JoinPoint joinPoint) {
 		outputLog(joinPoint);
@@ -84,5 +85,6 @@ public class LoggingAdvice {
 	private String getReturnValue(Object returnValue) {
 		return (returnValue != null) ? returnValue.toString() : "return value is null";
 	}
+	**/
 
 }
