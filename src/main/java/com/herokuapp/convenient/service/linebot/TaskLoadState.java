@@ -12,6 +12,7 @@ import com.herokuapp.convenient.repository.TaskRepository;
 import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
 import com.herokuapp.convenient.repository.impl.TaskRepositoryImpl;
 import com.herokuapp.convenient.service.consts.StatusKind;
+import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;

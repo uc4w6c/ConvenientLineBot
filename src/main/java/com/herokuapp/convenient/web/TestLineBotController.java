@@ -31,7 +31,7 @@ public class TestLineBotController {
 	private final ConfigurableApplicationContext applicationContext;
 
 	public TestLineBotController(LineBotService lineBotService,
-						final ConfigurableApplicationContext applicationContext) {
+						final ConfigurableApplicationContext applicationContext) throws Exception {
 		this.lineBotService = lineBotService;
 		this.applicationContext = applicationContext;
 	}
@@ -74,7 +74,7 @@ public class TestLineBotController {
 	}
 
 	@PostMapping(path = "create")
-	public Message create(@RequestBody CallbackRequest callBackRequest) {
+	public Message create(@RequestBody CallbackRequest callBackRequest) throws Exception {
 		System.out.println(callBackRequest);
 
 		// TODO: 色々汚いから変えたい
@@ -85,7 +85,8 @@ public class TestLineBotController {
 		if (event instanceof MessageEvent) {
 			MessageEvent<TextMessageContent> messageEvent= (MessageEvent<TextMessageContent>)event;
 			System.out.println(messageEvent);
-			return lineBotService.makeReply(messageEvent);
+			TextMessageContent message = messageEvent.getMessage();
+			return lineBotService.makeReply(messageEvent.getReplyToken(), messageEvent, message);
 		} else {
 			return null;
 		}

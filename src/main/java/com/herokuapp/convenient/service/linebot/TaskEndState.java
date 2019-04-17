@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.herokuapp.convenient.domain.State;
 import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
 import com.herokuapp.convenient.service.consts.StatusKind;
+import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
