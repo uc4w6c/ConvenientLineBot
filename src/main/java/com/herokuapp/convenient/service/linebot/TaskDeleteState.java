@@ -54,7 +54,7 @@ public class TaskDeleteState implements StateService {
 		int i = 0;
 		for (Task taskTodo : tasks) {
 			List<Action> action = Collections.singletonList(new PostbackAction(DELETE_MESSAGE, taskTodo.getId().toString()));
-			CarouselColumn carouselColumn = new CarouselColumn("", Integer.toString(i), taskTodo.getTodoText(), action);
+			CarouselColumn carouselColumn = new CarouselColumn(null, Integer.toString(i), taskTodo.getTodoText(), action);
 			carouselColumns.add(carouselColumn);
 			i++;
 		}
