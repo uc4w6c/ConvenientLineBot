@@ -71,7 +71,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 					(SELECT_STATE + " and room_id = :roomId", State.class)
 					.setParameter("type", state.getSourceType())
 					.setParameter("userId", state.getUserId())
-					.setParameter("room_id", state.getRoomId());
+					.setParameter("roomId", state.getRoomId());
 
 		} else {
 			throw new IllegalArgumentException("SourceTypeに設定の値が想定外の値です。");
