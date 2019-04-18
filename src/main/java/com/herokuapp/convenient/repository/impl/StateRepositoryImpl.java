@@ -68,7 +68,7 @@ public class StateRepositoryImpl implements StateRepositoryCustom {
 
 		} else if (type == SourceType.ROOM.getCode()) {
 			query = manager.createNativeQuery
-					(SELECT_STATE + " and group_id = :groupId", State.class)
+					(SELECT_STATE + " and room_id = :roomId", State.class)
 					.setParameter("type", state.getSourceType())
 					.setParameter("userId", state.getUserId())
 					.setParameter("room_id", state.getRoomId());
