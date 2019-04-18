@@ -58,6 +58,6 @@ public class TaskDeleteState implements StateService {
 			carouselColumns.add(carouselColumn);
 			i++;
 		}
-		return new TemplateMessage("", new CarouselTemplate(carouselColumns));
+		return new TemplateMessage("テスト", new CarouselTemplate(carouselColumns));
 	};
 }
