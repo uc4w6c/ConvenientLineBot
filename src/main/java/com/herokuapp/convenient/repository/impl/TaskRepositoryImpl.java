@@ -55,10 +55,10 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
 		} else if (type == SourceType.ROOM.getCode()) {
 			query = manager.createNativeQuery
-					(SELECT_TASK + " and group_id = :groupId", Task.class)
+					(SELECT_TASK + " and room_id = :roomId", Task.class)
 					.setParameter("type", state.getSourceType())
 					.setParameter("userId", state.getUserId())
-					.setParameter("room_id", state.getRoomId());
+					.setParameter("roomId", state.getRoomId());
 
 		} else {
 			throw new IllegalArgumentException("SourceTypeに設定の値が想定外の値です。");
