@@ -86,7 +86,7 @@ public class TestLineBotController {
 			MessageEvent<TextMessageContent> messageEvent= (MessageEvent<TextMessageContent>)event;
 			System.out.println(messageEvent);
 			TextMessageContent message = messageEvent.getMessage();
-			return lineBotService.makeReply(messageEvent.getReplyToken(), messageEvent, message);
+			return lineBotService.makeReply(messageEvent, message);
 		} else {
 			return null;
 		}
