@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.herokuapp.convenient.domain.State;
+import com.herokuapp.convenient.domain.Task;
 import com.herokuapp.convenient.repository.StateRepository;
 import com.herokuapp.convenient.repository.TaskRepository;
 import com.herokuapp.convenient.repository.impl.StateRepositoryImpl;
@@ -79,6 +80,7 @@ public class LineBotService {
 	private final String DELETE_REQUEST = "削除";
 
 	private final String DELETE_REPLY_MSG = "削除したにゃ";
+	private final String NOTING_TASK_REPLY_MSG = "削除対象は存在しないにゃ";
 	
 	/** 
 	 * 取得したメッセージから返却するメッセージを決める
@@ -171,7 +173,11 @@ public class LineBotService {
 	 */
 	public Message deleteTask(PostbackEvent event, String deleteId) {
 		// WARNING: deleteIdが整数型ではない場合のエラーチェックはしていない
-		taskRepository.deleteById(Integer.parseInt(deleteId));
+		Task task = taskRepository.getOne(Integer.parseInt(deleteId));
+		if (task == null) {
+			return new TextMessage(NOTING_TASK_REPLY_MSG);
+		}
+		taskRepository.delete(task);
 		return new TextMessage(DELETE_REPLY_MSG);
 	}
 
