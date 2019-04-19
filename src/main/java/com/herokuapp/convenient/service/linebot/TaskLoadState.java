@@ -27,6 +27,8 @@ public class TaskLoadState implements StateService {
 	@Autowired
 	private TaskRepositoryImpl taskRepositoryImpl;
 
+	private static final String NOTING_MEMO_MSG = "メモがないにゃー\r\n「にゃー」でメモを開始するにゃ";
+
 	public State stateStatusChange(State state) {
 		// 一旦は何も更新せずに返却
 		return state;
@@ -47,10 +49,19 @@ public class TaskLoadState implements StateService {
 													task.getRoomId());
 		**/
 
-		String replyMessage = "";
-		for (Task taskTodo : tasks) {
-			replyMessage = replyMessage + taskTodo.getTodoText() + "\r\n"; 
+		StringBuilder replyMessage = new StringBuilder();
+
+		if (tasks.size() == 0) {
+			replyMessage.append(NOTING_MEMO_MSG);
 		}
-		return new TextMessage(replyMessage);
+
+		boolean isFirst = true;
+		for (Task taskTodo : tasks) {
+			if (!isFirst) {
+				replyMessage.append(System.getProperty("line.separator"));
+			}
+			replyMessage.append(taskTodo.getTodoText());
+		}
+		return new TextMessage(replyMessage.toString());
 	};
 }

@@ -5,11 +5,13 @@ package com.herokuapp.convenient.web;
 import com.herokuapp.convenient.service.LineBotService;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.AudioMessageContent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
 import com.linecorp.bot.model.event.message.StickerMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.message.VideoMessageContent;
+import com.linecorp.bot.model.event.postback.PostbackContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
@@ -30,7 +32,13 @@ public class LineBotController {
 	@EventMapping
 	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
 		TextMessageContent message = event.getMessage();
-		return lineBotService.makeReply(event.getReplyToken(), event, message);
+		return lineBotService.makeReply(event, message);
+	}
+
+	@EventMapping
+	public Message handlePostBackEvent(PostbackEvent event) throws Exception {
+		String deleteId = event.getPostbackContent().getData();
+		return lineBotService.deleteTask(event, deleteId);
 	}
 
 	@EventMapping

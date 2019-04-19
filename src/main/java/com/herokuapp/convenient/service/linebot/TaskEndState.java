@@ -27,7 +27,6 @@ public class TaskEndState implements StateService {
 		State newState = state.changeStatus(StatusKind.WAITING.value());
 		State updateAfterState = stateRepositoryImpl.save(newState);
 		return updateAfterState;
-
 	};
 
 	public Message createMessage(MessageEvent<TextMessageContent> event, State state) {

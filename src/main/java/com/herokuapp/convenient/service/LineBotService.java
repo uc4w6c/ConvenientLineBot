@@ -29,6 +29,7 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.GroupSource;
 import com.linecorp.bot.model.event.source.RoomSource;
@@ -47,9 +48,10 @@ public class LineBotService {
 	StateRepository stateRepository;
 	@Autowired
 	StateRepositoryImpl stateRepositoryImpl;
+	**/
 	@Autowired
 	TaskRepository taskRepository;
-	**/
+
 
 	@Autowired
 	TaskStartState taskStartState;
@@ -75,13 +77,15 @@ public class LineBotService {
 	private final String END_REQUEST = "おわり";
 	private final String MEMO_REQUEST = "メモ";
 	private final String DELETE_REQUEST = "削除";
+
+	private final String DELETE_REPLY_MSG = "削除したにゃ";
+	
 	/** 
 	 * 取得したメッセージから返却するメッセージを決める
 	 * @param event
 	 * @return String
 	 */
-	public Message makeReply(String replyToken,
-						MessageEvent<TextMessageContent> event,
+	public Message makeReply(MessageEvent<TextMessageContent> event,
 						TextMessageContent content) throws Exception {
 
 		State state = stateBuildByEvent(event);
@@ -157,4 +161,18 @@ public class LineBotService {
 								).build();
 		}
 	}
+
+	/**
+	 * 削除を指示した場合のコールバックで利用
+	 * 指定したIDのタスクを削除する
+	 * @param event
+	 * @param deleteId
+	 * @return
+	 */
+	public Message deleteTask(PostbackEvent event, String deleteId) {
+		// WARNING: deleteIdが整数型ではない場合のエラーチェックはしていない
+		taskRepository.deleteById(Integer.parseInt(deleteId));
+		return new TextMessage(DELETE_REPLY_MSG);
+	}
+
 }
