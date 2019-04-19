@@ -58,7 +58,7 @@ public class TaskLoadState implements StateService {
 		boolean isFirst = true;
 		for (Task taskTodo : tasks) {
 			if (!isFirst) {
-				replyMessage.append(System.getProperty("line.separator"));
+				replyMessage.append("\r\n");
 			}
 			replyMessage.append(taskTodo.getTodoText());
 		}
