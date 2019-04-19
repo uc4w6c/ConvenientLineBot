@@ -1,0 +1,15 @@
+{
+  "events":[{
+    "type":"postback",
+    "replyToken":"1cea2ed9e7b34dd6b74d9d612a0f803f",
+    "source":{
+      "userId":"Ua3981c89997c070da93d40cd7a333540",
+      "type":"user"
+    },
+    "timestamp":1555680474378,
+    "postback":{
+      "data":"2"
+    }
+  }],
+  "destination":"Ue9a61c7180a36e772a2d5565e9b78504"
+}

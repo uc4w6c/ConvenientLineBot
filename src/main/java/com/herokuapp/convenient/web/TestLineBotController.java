@@ -17,6 +17,7 @@ import com.herokuapp.convenient.service.LineBotService;
 import com.linecorp.bot.model.event.CallbackRequest;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
@@ -87,6 +88,21 @@ public class TestLineBotController {
 			System.out.println(messageEvent);
 			TextMessageContent message = messageEvent.getMessage();
 			return lineBotService.makeReply(messageEvent, message);
+		} else {
+			return null;
+		}
+	}
+
+	@PostMapping(path = "delete")
+	public Message deleteTask(@RequestBody CallbackRequest callBackRequest) throws Exception {
+		System.out.println("CallBackRequest:" + callBackRequest);
+
+		Event event = callBackRequest.getEvents().get(0);
+		if (event instanceof PostbackEvent) {
+			PostbackEvent postBackEvent= (PostbackEvent)event;
+			System.out.println("PostBackEvent:" + postBackEvent);
+			String deleteId = postBackEvent.getPostbackContent().getData();
+			return lineBotService.deleteTask(postBackEvent, deleteId);
 		} else {
 			return null;
 		}

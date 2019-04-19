@@ -2,6 +2,7 @@ package com.herokuapp.convenient.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.BeanFactory;
@@ -173,12 +174,13 @@ public class LineBotService {
 	 */
 	public Message deleteTask(PostbackEvent event, String deleteId) {
 		// WARNING: deleteIdが整数型ではない場合のエラーチェックはしていない
-		Task task = taskRepository.getOne(Integer.getInteger(deleteId));
-		if (task == null) {
+		Optional<Task> taskOpt = taskRepository.findById(new Integer(deleteId));
+		if (taskOpt.isPresent()) {
+			taskRepository.delete(taskOpt.get());
+			return new TextMessage(DELETE_REPLY_MSG);
+		} else {
 			return new TextMessage(NOTING_TASK_REPLY_MSG);
 		}
-		taskRepository.delete(task);
-		return new TextMessage(DELETE_REPLY_MSG);
 	}
 
 }
