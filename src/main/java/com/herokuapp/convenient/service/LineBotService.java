@@ -173,7 +173,7 @@ public class LineBotService {
 	 */
 	public Message deleteTask(PostbackEvent event, String deleteId) {
 		// WARNING: deleteIdが整数型ではない場合のエラーチェックはしていない
-		Task task = taskRepository.getOne(Integer.parseInt(deleteId));
+		Task task = taskRepository.getOne(Integer.getInteger(deleteId));
 		if (task == null) {
 			return new TextMessage(NOTING_TASK_REPLY_MSG);
 		}
