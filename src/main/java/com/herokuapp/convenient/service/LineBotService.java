@@ -174,6 +174,8 @@ public class LineBotService {
 	 */
 	public Message deleteTask(PostbackEvent event, String deleteId) {
 		// WARNING: deleteIdが整数型ではない場合のエラーチェックはしていない
+		// TODO: IDだけで削除するのではなく、ユーザーとかで削除したい。
+		//       もっというと、カルーセルを作成時にハッシュ値作成するか？
 		Optional<Task> taskOpt = taskRepository.findById(new Integer(deleteId));
 		if (taskOpt.isPresent()) {
 			taskRepository.delete(taskOpt.get());

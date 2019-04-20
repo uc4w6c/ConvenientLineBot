@@ -34,15 +34,15 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 	private EntityManager manager;
 
 	private final String SELECT_TASK = "SELECT * FROM tasks "
-								+ "WHERE source_type = :type and "
-								+ "user_id = :userId";
+								+ "WHERE source_type = :type ";
 
 	public List<Task> fetchState(State state) {
 		int type = state.getSourceType();
 		Query query;
 
 		if (type == SourceType.USER.getCode()) {
-			query = manager.createNativeQuery(SELECT_TASK, Task.class)
+			query = manager.createNativeQuery
+					(SELECT_TASK + " and user_id = :userId", Task.class)
 						.setParameter("type", state.getSourceType())
 						.setParameter("userId", state.getUserId());
 
@@ -50,14 +50,14 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 			query = manager.createNativeQuery
 					(SELECT_TASK + " and group_id = :groupId", Task.class)
 					.setParameter("type", state.getSourceType())
-					.setParameter("userId", state.getUserId())
+					//.setParameter("userId", state.getUserId())
 					.setParameter("groupId", state.getGroupId());
 
 		} else if (type == SourceType.ROOM.getCode()) {
 			query = manager.createNativeQuery
 					(SELECT_TASK + " and room_id = :roomId", Task.class)
 					.setParameter("type", state.getSourceType())
-					.setParameter("userId", state.getUserId())
+					//.setParameter("userId", state.getUserId())
 					.setParameter("roomId", state.getRoomId());
 
 		} else {
