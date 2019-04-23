@@ -56,9 +56,11 @@ public class TestLineBotIntegrationTest {
 		callBackRequest = new CallbackRequest(events);
 
 		Message responseBody = template.postForObject(uri, callBackRequest, Message.class);
+		String expected = "メモをとるにゃー \n\r"
+						+ "「おわり」って言ったら終わるにゃ!";
+		TextMessage expectedMessage = new TextMessage(expected);
+		System.out.println(expectedMessage);
 
-		TextMessage expectedMessage;
-		
-		assertThat(responseBody).isEqualTo("Hello World");
+		assertThat(responseBody).isEqualTo(expectedMessage);
 	}
 }
