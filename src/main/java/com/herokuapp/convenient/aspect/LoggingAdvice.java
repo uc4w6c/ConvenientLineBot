@@ -16,6 +16,7 @@ import java.util.ArrayList;
 @Aspect
 @Component
 // 試しにAOPしてみた 参考：https://qiita.com/mijinco0612/items/ac03a3717f2c877ac675
+// AOPをするとDIがうまくいかない
 public class LoggingAdvice {
 	private final Logger logger;
 

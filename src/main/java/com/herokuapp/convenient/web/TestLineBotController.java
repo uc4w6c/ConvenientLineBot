@@ -2,6 +2,7 @@ package com.herokuapp.convenient.web;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,6 +22,7 @@ import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineBotMessages;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @RestController
@@ -92,6 +94,16 @@ public class TestLineBotController {
 			return null;
 		}
 	}
+
+	/*
+	LineBotServerInterceptor.java:49に失敗するから試してみたけど無理だった
+	@PostMapping(path = "create")
+	public Message create(@LineBotMessages List<Event> events) throws Exception {
+		MessageEvent<TextMessageContent> messageEvent= (MessageEvent<TextMessageContent>)events.get(0);
+		TextMessageContent message = messageEvent.getMessage();
+		return lineBotService.makeReply(messageEvent, message);
+	}
+	*/
 
 	@PostMapping(path = "delete")
 	public Message deleteTask(@RequestBody CallbackRequest callBackRequest) throws Exception {
