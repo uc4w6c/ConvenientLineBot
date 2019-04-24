@@ -8,6 +8,10 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.dbunit.DataSourceBasedDBTestCase;
+import org.dbunit.dataset.IDataSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +20,14 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.linecorp.bot.model.event.CallbackRequest;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -28,7 +38,14 @@ import com.linecorp.bot.model.message.TextMessage;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestExecutionListeners({
+	DependencyInjectionTestExecutionListener.class,
+	TransactionalTestExecutionListener.class, // (1)
+	DbUnitTestExecutionListener.class
+})
+@Transactional //(2)
 public class TestLineBotIntegrationTest {
+	
 	@LocalServerPort
 	private int port;
 
@@ -36,12 +53,13 @@ public class TestLineBotIntegrationTest {
 	private TestRestTemplate template;
 
 	@Before
-	public void setup() {
+	public void setUp() {
 
 	}
 	
 	@Test
-	public void sampleTest() throws Exception {
+	@DatabaseSetup("/dbunit/startTask.xml")
+	public void タスク開始Test() throws Exception {
 		URI uri = new URI("http://localhost:" + port + "/linebot/create");
 
 		CallbackRequest callBackRequest;
@@ -63,4 +81,5 @@ public class TestLineBotIntegrationTest {
 
 		assertThat(responseBody).isEqualTo(expectedMessage);
 	}
+
 }
