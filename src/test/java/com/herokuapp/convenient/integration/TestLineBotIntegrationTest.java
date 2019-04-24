@@ -2,7 +2,11 @@ package com.herokuapp.convenient.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URI;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -11,12 +15,17 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.dbunit.DataSourceBasedDBTestCase;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -38,27 +47,57 @@ import com.linecorp.bot.model.message.TextMessage;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestExecutionListeners({
-	DependencyInjectionTestExecutionListener.class,
-	TransactionalTestExecutionListener.class, // (1)
-	DbUnitTestExecutionListener.class
-})
-@Transactional //(2)
+//@TestExecutionListeners({
+//	DependencyInjectionTestExecutionListener.class,
+//	TransactionalTestExecutionListener.class,
+//	DbUnitTestExecutionListener.class
+//})
+//@Transactional
 public class TestLineBotIntegrationTest {
-	
+
 	@LocalServerPort
 	private int port;
 
 	@Autowired
 	private TestRestTemplate template;
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
+	/** データベースのバックアップ */
+	private File backupFile;
+
 	@Before
 	public void setUp() {
 
+		// バックアップ取得
+		// 参考 https://qiita.com/tamurashingo@github/items/e37697796001bb40f0d2
+		Connection conn = null;
+		try {
+			conn = jdbcTemplate.getDataSource().getConnection();
+			IDatabaseConnection dbconn = new DatabaseConnection(conn);
+			QueryDataSet partialDataSet = QueryDataSet(dbconn);
+
+			// バックアップを取りたいテーブルを列挙
+			partialDataSet.addTable("emp");
+			partialDataSet.addTable("dept");
+			// バックアップ内容を保持するファイルを生成
+			backupFile = File.createTempFile("testdb_bak", ".xml");
+			// テーブルの内容をファイルに書き込む
+			FlatXmlDataSet.write(partialDataSet, new FileOutputStream(backupFile));
+		}catch(Exception e){
+			e.printStackTrace();
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}	
+			}catch(SQLException e){}
+		}
 	}
 	
 	@Test
-	@DatabaseSetup("/dbunit/startTask.xml")
+	//@DatabaseSetup("/dbunit/startTask.xml")
 	public void タスク開始Test() throws Exception {
 		URI uri = new URI("http://localhost:" + port + "/linebot/create");
 
