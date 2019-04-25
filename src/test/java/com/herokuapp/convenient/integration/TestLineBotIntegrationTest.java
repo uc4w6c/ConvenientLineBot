@@ -20,6 +20,10 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.mssql.InsertIdentityOperation;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,11 +80,11 @@ public class TestLineBotIntegrationTest {
 		try {
 			conn = jdbcTemplate.getDataSource().getConnection();
 			IDatabaseConnection dbconn = new DatabaseConnection(conn);
-			QueryDataSet partialDataSet = QueryDataSet(dbconn);
+			QueryDataSet partialDataSet = new QueryDataSet(dbconn);
 
 			// バックアップを取りたいテーブルを列挙
-			partialDataSet.addTable("emp");
-			partialDataSet.addTable("dept");
+			partialDataSet.addTable("states");
+			partialDataSet.addTable("tasks");
 			// バックアップ内容を保持するファイルを生成
 			backupFile = File.createTempFile("testdb_bak", ".xml");
 			// テーブルの内容をファイルに書き込む
@@ -119,6 +123,29 @@ public class TestLineBotIntegrationTest {
 		System.out.println(expectedMessage);
 
 		assertThat(responseBody).isEqualTo(expectedMessage);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		if (backupFile == null) {
+			return;
+		}
+
+		Connection conn = null;
+		try {
+			conn = jdbcTemplate.getDataSource().getConnection();
+			IDatabaseConnection dbconn = new DatabaseConnection(conn);
+
+			IDataSet dataSet = new FlatXmlDataSetBuilder().build(backupFile);
+			new InsertIdentityOperation(DatabaseOperation.CLEAN_INSERT).execute(dbconn, dataSet);
+			backupFile = null;
+
+			// dbconn.getConnection().commit();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
 	}
 
 }
