@@ -101,7 +101,7 @@ public class TestLineBotIntegrationTest {
 	}
 	
 	@Test
-	//@DatabaseSetup("/dbunit/startTask.xml")
+	@DatabaseSetup("/dbunit/startTask.xml")
 	public void タスク開始Test() throws Exception {
 		URI uri = new URI("http://localhost:" + port + "/linebot/create");
 
@@ -120,7 +120,29 @@ public class TestLineBotIntegrationTest {
 		String expected = "メモをとるにゃー \n\r"
 						+ "「おわり」って言ったら終わるにゃ!";
 		TextMessage expectedMessage = new TextMessage(expected);
-		System.out.println(expectedMessage);
+
+		assertThat(responseBody).isEqualTo(expectedMessage);
+	}
+
+	@Test
+	@DatabaseSetup("/dbunit/recordTask.xml")
+	public void メモTest() throws Exception {
+		URI uri = new URI("http://localhost:" + port + "/linebot/create");
+
+		CallbackRequest callBackRequest;
+		List<Event> events = new ArrayList<>();
+		MessageEvent<TextMessageContent> event = 
+				new MessageEvent<>("0f3779fba3b349968c5d07db31eab56f",
+									new UserSource("U4af4980629..."),
+									new TextMessageContent("325708", "メモ投入"),
+									LocalDateTime.now().toInstant(ZoneOffset.UTC));
+		events.add(event);
+
+		callBackRequest = new CallbackRequest(events);
+
+		Message responseBody = template.postForObject(uri, callBackRequest, Message.class);
+		String expected = "メモったにゃ!";
+		TextMessage expectedMessage = new TextMessage(expected);
 
 		assertThat(responseBody).isEqualTo(expectedMessage);
 	}

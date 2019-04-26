@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<tasks />
+	<states />
+	<tasks Id="1" 
+		source_type="0f3779fba3b349968c5d07db31eab56f"
+		user_id="U4af4980629..."
+		group_id=""
+		room_id=""
+		todo_text="すでに入っているメモ"
+		created_at=""
+		deleted_at="" />
+	<states Id="1"
+		source_type="0f3779fba3b349968c5d07db31eab56f"
+		user_id="U4af4980629..."
+		group_id=""
+		room_id=""
+		state_kind="1"
+		status="1"
+		updated_at="" />
+</dataset>
