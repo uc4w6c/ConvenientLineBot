@@ -99,7 +99,7 @@ public class TestLineBotIntegrationTest {
 			}catch(SQLException e){}
 		}
 	}
-	
+
 	@Test
 	@DatabaseSetup("/dbunit/startTask.xml")
 	public void タスク開始Test() throws Exception {
