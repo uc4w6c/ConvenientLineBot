@@ -71,6 +71,7 @@ public class LoggingAdvice {
 		// long型になっているのを無理やりint型へキャストしている
 		int aroundMicrosecond = (int) ChronoUnit.MICROS.between(requestAt, responseAt);
 
+		// TODO: 暫定でここに記載しているけど、別スレッドで起動してここでExceptionが発生しても普通にレスポンスするようにしたい
 		AccessLog accessLog = new AccessLog(
 										null, requestAt, responseAt, 
 										getSessionId(), getClassName(joinPoint), getSignatureName(joinPoint),
