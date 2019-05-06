@@ -20,9 +20,12 @@ public class ExampleController {
 	}
 
 	@GetMapping(path = "echo")
-	String getEcho() {
+	String getEcho() throws Exception {
 		System.out.println("echo");
-		return "echo";
+
+		// テスト用にあえてExceptionを投げる
+		throw new Exception();
+		//return "echo";
 	}
 
 	@PostMapping
