@@ -39,6 +39,7 @@ public class TaskDeleteState implements StateService {
 	public State stateStatusChange(State state) {
 		// TODO: ACCEPTINGを削除待ち的なものに変更したい。
 		//       もしくは削除するためのURLを渡してあげる？いやブラウザ起動するとうざいな
+		//       →ハッシュ値を生成して渡そう
 		
 		// 一旦実装を消しておく
 		//State newState = state.changeStatus(StatusKind.ACCEPTING.value());
