@@ -10,22 +10,30 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.request.ServletWebRequest;
 
+import com.herokuapp.convenient.domain.AccessLog;
+import com.herokuapp.convenient.repository.AccessLogRepository;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component
 // 試しにAOPしてみた 参考：https://qiita.com/mijinco0612/items/ac03a3717f2c877ac675
 // AOPをするとDIがうまくいかない
 public class LoggingAdvice {
+
+	private static final String SUCCESS_STATUS = "200";
+	private static final String SYSTEM_ERROR_STATUS = "500";
+
+	@Autowired
+	private AccessLogRepository accessLogRepository;
+
 	private final Logger logger;
 
 	public LoggingAdvice() {
@@ -47,12 +55,29 @@ public class LoggingAdvice {
 	public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 		outputLog(joinPoint);
 		Object retVal = null;
+		String responseStatus = "";
+		LocalDateTime requestAt = getNowLocalDateTime();
 		try {
 			retVal = joinPoint.proceed();
 			outputLog(joinPoint, retVal);
+			responseStatus = SUCCESS_STATUS;
 		} catch (Exception e) {
 			outputErrorLog(joinPoint, e);
+			responseStatus = SYSTEM_ERROR_STATUS;
 		}
+		LocalDateTime responseAt = getNowLocalDateTime();
+
+		// リクエストとレスポンスの間の差分をミリ秒単位で計算
+		// long型になっているのを無理やりint型へキャストしている
+		int aroundMicrosecond = (int) ChronoUnit.MICROS.between(requestAt, responseAt);
+
+		AccessLog accessLog = new AccessLog(
+										null, requestAt, responseAt, 
+										getSessionId(), getClassName(joinPoint), getSignatureName(joinPoint),
+										getArguments(joinPoint), getHttpMethod(), getRequestUri(),
+										responseStatus, aroundMicrosecond);
+		accessLogRepository.save(accessLog);
+
 		return retVal;
 	}
 
@@ -103,6 +128,10 @@ public class LoggingAdvice {
 		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getMethod();
 	}
 
+	private String getRequestUri() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getRequestURI();
+	}
+
 	private String getSessionId() {
 		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession().getId();
 	}
@@ -133,6 +162,15 @@ public class LoggingAdvice {
 
 	private String getReturnValue(Object returnValue) {
 		return (returnValue != null) ? returnValue.toString() : "return value is null";
+	}
+
+	/**
+	 * マイクロ秒まで出力したいが、現在の仕様ではミリ秒までしか出力しない
+	 * 正確な値が出力したければNTPサーバを検討する必要がある
+	 * @return LocalDateTime
+	 */
+	private LocalDateTime getNowLocalDateTime() {
+		return LocalDateTime.now();
 	}
 
 }

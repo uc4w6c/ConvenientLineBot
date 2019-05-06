@@ -24,8 +24,8 @@ public class ExampleController {
 		System.out.println("echo");
 
 		// テスト用にあえてExceptionを投げる
-		throw new Exception();
-		//return "echo";
+		// throw new Exception();
+		return "echo";
 	}
 
 	@PostMapping
